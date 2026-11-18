@@ -1,0 +1,20 @@
+<div class="wrap page-head">
+  <p class="kicker">// CATEGORIES</p>
+  <h1>分类</h1>
+  <p class="page-desc">按主题归类的知识条目，共 <%= site.categories.length %> 个分类。</p>
+</div>
+
+<section class="wrap section">
+  <% if (site.categories.length) { %>
+  <div class="taxonomy-grid">
+    <% site.categories.sort('name').each(function (category) { %>
+    <a class="taxonomy-card" href="<%- url_for(category.path) %>">
+      <span class="taxonomy-name"><%= category.name %></span>
+      <span class="taxonomy-count"><%= category.length %> 篇</span>
+    </a>
+    <% }) %>
+  </div>
+  <% } else { %>
+  <div class="empty">还没有分类。在文章 front-matter 中添加 <code>categories</code> 即可自动归类。</div>
+  <% } %>
+</section>

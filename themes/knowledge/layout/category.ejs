@@ -1,0 +1,18 @@
+<div class="wrap page-head">
+  <p class="kicker">// CATEGORY</p>
+  <h1><%= page.category %></h1>
+  <p class="page-desc">该分类下共 <%= page.posts.length %> 篇文章。</p>
+</div>
+
+<section class="wrap section">
+  <% if (page.posts.length) { %>
+  <div class="post-grid">
+    <% page.posts.each(function (post) { %>
+      <%- partial('_partial/post-card', { post: post }) %>
+    <% }) %>
+  </div>
+  <% } else { %>
+  <div class="empty">该分类下暂时没有文章。</div>
+  <% } %>
+  <%- partial('_partial/pagination') %>
+</section>

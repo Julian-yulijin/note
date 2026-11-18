@@ -1,7 +1,8 @@
 ---
 title: 如何创建hexo博客
 date: 2026-11-18 23:28:41
-tags:
+categories: 学习笔记
+tags: [Hexo, 博客]
 ---
 本篇文章的内容基于已经下载好了已经在HEXO官网下载好了hexo，已经安装 Node.js 和 npm，已经安装 Hexo CLI，已经安装 Git
 1、创建博客项目

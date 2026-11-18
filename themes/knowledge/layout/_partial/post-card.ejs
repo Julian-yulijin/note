@@ -1,0 +1,24 @@
+<%
+  var plain = strip_html(post.excerpt || post.content).replace(/\s+/g, ' ').trim();
+  var excerpt = plain.length > 120 ? plain.slice(0, 120) + '…' : plain;
+  var words = strip_html(post.content).replace(/\s+/g, '').length;
+  var minutes = Math.max(1, Math.ceil(words / 350));
+%>
+<article class="card">
+  <a class="card-link" href="<%- url_for(post.path) %>">
+    <div class="card-meta">
+      <time datetime="<%= post.date.toISOString() %>"><%= date(post.date, 'YYYY-MM-DD') %></time>
+      <span class="dot">·</span>
+      <span><%= minutes %> 分钟</span>
+    </div>
+    <h3 class="card-title"><%= post.title %></h3>
+    <% if (excerpt) { %><p class="card-excerpt"><%= excerpt %></p><% } %>
+    <% if (post.tags && post.tags.length) { %>
+    <div class="card-tags">
+      <% post.tags.each(function (tag) { %>
+      <span class="chip"># <%= tag.name %></span>
+      <% }) %>
+    </div>
+    <% } %>
+  </a>
+</article>

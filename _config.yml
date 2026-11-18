@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
-description: ''
+title: 我的知识库
+subtitle: 记录 · 整理 · 检索
+description: 一个用于沉淀知识、记录思考的个人知识库。
 keywords:
-author: John Doe
-language: en
+author: ''
+language: zh-CN
 timezone: ''
 
 # URL
@@ -97,7 +97,15 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: knowledge
+
+# Search
+## Docs: https://github.com/next-theme/hexo-generator-searchdb
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment

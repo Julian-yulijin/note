@@ -1,0 +1,18 @@
+<div class="wrap page-head">
+  <p class="kicker">// TAG</p>
+  <h1># <%= page.tag %></h1>
+  <p class="page-desc">带有该标签的文章共 <%= page.posts.length %> 篇。</p>
+</div>
+
+<section class="wrap section">
+  <% if (page.posts.length) { %>
+  <div class="post-grid">
+    <% page.posts.each(function (post) { %>
+      <%- partial('_partial/post-card', { post: post }) %>
+    <% }) %>
+  </div>
+  <% } else { %>
+  <div class="empty">该标签下暂时没有文章。</div>
+  <% } %>
+  <%- partial('_partial/pagination') %>
+</section>

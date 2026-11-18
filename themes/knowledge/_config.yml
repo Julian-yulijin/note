@@ -1,0 +1,32 @@
+
+# ============================================
+# Knowledge 主题配置
+# ============================================
+
+# 默认配色：dark | light（首次访问使用，用户手动切换后会被记住）
+default_color: dark
+
+# 导航菜单
+menu:
+  首页: /
+  归档: /archives/
+  分类: /categories/
+  标签: /tags/
+
+# 首页 Hero 区域
+hero:
+  enable: true
+  kicker: '// KNOWLEDGE BASE'
+  title: 我的知识库
+  subtitle: 记录 · 整理 · 检索
+  description: 把零散的笔记、经验和思考沉淀成一张可检索的知识网络。
+  primary_action:
+    text: 浏览归档
+    link: /archives/
+
+# 文章目录
+toc:
+  enable: true
+
+# 页脚文案
+footer_text: 知识需要被记录，也需要被检索。

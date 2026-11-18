@@ -1,0 +1,20 @@
+<div class="wrap page-head">
+  <p class="kicker">// TAGS</p>
+  <h1>标签</h1>
+  <p class="page-desc">用标签串联跨主题的知识，共 <%= site.tags.length %> 个标签。</p>
+</div>
+
+<section class="wrap section">
+  <% if (site.tags.length) { %>
+  <div class="tag-cloud">
+    <% site.tags.sort('name').each(function (tag) { %>
+    <a class="tag-chip" href="<%- url_for(tag.path) %>">
+      <span># <%= tag.name %></span>
+      <span class="count"><%= tag.length %></span>
+    </a>
+    <% }) %>
+  </div>
+  <% } else { %>
+  <div class="empty">还没有标签。在文章 front-matter 中添加 <code>tags</code> 即可自动生成。</div>
+  <% } %>
+</section>

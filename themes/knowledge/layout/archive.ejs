@@ -1,0 +1,28 @@
+<div class="wrap page-head">
+  <p class="kicker">// ARCHIVE</p>
+  <h1>归档</h1>
+  <p class="page-desc"><%= site.posts.length %> 篇文章，按时间倒序排列。</p>
+</div>
+
+<section class="wrap section">
+  <% var lastYear = null; %>
+  <% page.posts.each(function (post) { %>
+    <% var year = post.date.year(); %>
+    <% if (year !== lastYear) { %>
+      <% if (lastYear !== null) { %></ul></section><% } %>
+      <% lastYear = year; %>
+      <section class="archive-year">
+        <h2 class="year-title"><%= year %></h2>
+        <ul class="archive-list">
+    <% } %>
+    <li class="archive-item">
+      <time datetime="<%= post.date.toISOString() %>"><%= date(post.date, 'MM-DD') %></time>
+      <a href="<%- url_for(post.path) %>"><%= post.title %></a>
+    </li>
+  <% }) %>
+  <% if (lastYear !== null) { %></ul></section><% } %>
+  <% if (!page.posts.length) { %>
+  <div class="empty">还没有文章可归档。</div>
+  <% } %>
+  <%- partial('_partial/pagination') %>
+</section>

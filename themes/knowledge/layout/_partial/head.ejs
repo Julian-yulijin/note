@@ -1,0 +1,23 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b10">
+  <title><%= page.title ? page.title + ' · ' + config.title : config.title %></title>
+  <% if (page.description || config.description) { %>
+  <meta name="description" content="<%= page.description || config.description %>">
+  <% } %>
+  <link rel="icon" type="image/svg+xml" href="<%- url_for('images/favicon.svg') %>">
+  <link rel="stylesheet" href="<%- url_for('css/style.css') %>">
+  <script>
+    (function () {
+      var fallback = '<%= theme.default_color || "dark" %>';
+      var stored = null;
+      try { stored = localStorage.getItem('theme'); } catch (e) {}
+      if (stored !== 'light' && stored !== 'dark') {
+        var match = document.cookie.match(/(?:^|;\s*)theme=(light|dark)/);
+        if (match) stored = match[1];
+      }
+      document.documentElement.setAttribute('data-theme', stored === 'light' || stored === 'dark' ? stored : fallback);
+    })();
+  </script>
+</head>

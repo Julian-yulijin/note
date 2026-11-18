@@ -1,0 +1,57 @@
+<%
+  var plain = strip_html(page.content).replace(/\s+/g, '');
+  var minutes = Math.max(1, Math.ceil(plain.length / 350));
+%>
+<article class="post wrap">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="<%= page.date.toISOString() %>"><%= date(page.date, 'YYYY-MM-DD') %></time>
+      <span class="dot">·</span>
+      <span><%= minutes %> 分钟阅读</span>
+      <% if (page.categories && page.categories.length) { %>
+      <span class="dot">·</span>
+      <% page.categories.each(function (category, i) { %>
+        <% if (i) { %><span class="slash">/</span><% } %>
+        <a href="<%- url_for(category.path) %>"><%= category.name %></a>
+      <% }) %>
+      <% } %>
+    </div>
+    <h1 class="post-title"><%= page.title %></h1>
+    <% if (page.tags && page.tags.length) { %>
+    <div class="post-tags">
+      <% page.tags.each(function (tag) { %>
+      <a class="chip" href="<%- url_for(tag.path) %>"># <%= tag.name %></a>
+      <% }) %>
+    </div>
+    <% } %>
+  </header>
+
+  <div class="post-body">
+    <div class="post-content" id="post-content"><%- page.content %></div>
+    <% if (!theme.toc || theme.toc.enable !== false) { %>
+    <aside class="toc" id="toc" aria-label="文章目录">
+      <p class="toc-title">目录</p>
+      <nav class="toc-nav" id="toc-nav"></nav>
+    </aside>
+    <% } %>
+  </div>
+
+  <% if (page.prev || page.next) { %>
+  <footer class="post-footer">
+    <nav class="post-nav" aria-label="上一篇 / 下一篇">
+      <% if (page.prev) { %>
+      <a class="post-nav-link prev" href="<%- url_for(page.prev.path) %>">
+        <span class="post-nav-label">← 上一篇</span>
+        <span class="post-nav-title"><%= page.prev.title %></span>
+      </a>
+      <% } %>
+      <% if (page.next) { %>
+      <a class="post-nav-link next" href="<%- url_for(page.next.path) %>">
+        <span class="post-nav-label">下一篇 →</span>
+        <span class="post-nav-title"><%= page.next.title %></span>
+      </a>
+      <% } %>
+    </nav>
+  </footer>
+  <% } %>
+</article>

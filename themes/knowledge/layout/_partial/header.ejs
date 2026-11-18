@@ -1,0 +1,38 @@
+<header class="site-header" id="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="<%- url_for('/') %>">
+      <span class="brand-mark" aria-hidden="true">K</span>
+      <span class="brand-text">
+        <strong><%= config.title %></strong>
+        <% if (config.subtitle) { %><small><%= config.subtitle %></small><% } %>
+      </span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <% var currentPath = page.path || ''; %>
+      <% Object.keys(theme.menu || {}).forEach(function (name) { %>
+        <% var target = theme.menu[name]; %>
+        <% var active = target === '/' ? (currentPath === '' || currentPath === 'index.html') : currentPath.indexOf(target.replace(/^\//, '')) === 0; %>
+        <a class="nav-link<%= active ? ' active' : '' %>" href="<%- url_for(target) %>"><%= name %></a>
+      <% }) %>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" type="button" data-open-search aria-label="搜索" title="搜索 (Ctrl+K)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+        </svg>
+      </button>
+      <button class="icon-btn" type="button" id="theme-toggle" aria-label="切换配色" title="切换配色">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+        </svg>
+      </button>
+      <button class="icon-btn nav-toggle" type="button" id="nav-toggle" aria-label="打开菜单" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
