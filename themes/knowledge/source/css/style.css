@@ -3025,3 +3025,178 @@ html[data-theme="light"] .footer-wordmark {
   line-height: 1.4;
   letter-spacing: -0.018em;
 }
+
+/* ==========================================================================
+   1.2.4.0 色彩层次 — 克制点缀色，不改整体基调
+   ========================================================================== */
+
+html[data-theme="dark"] {
+  --c-sky: #7dd3fc;
+  --c-sky-soft: rgba(125, 211, 252, 0.12);
+  --c-violet: #c4b5fd;
+  --c-violet-soft: rgba(196, 181, 253, 0.13);
+  --c-amber: #fcd34d;
+  --c-amber-soft: rgba(252, 211, 77, 0.1);
+  --c-rose: #fda4af;
+  --c-rose-soft: rgba(253, 164, 175, 0.1);
+}
+
+html[data-theme="light"] {
+  --c-sky: #0284c7;
+  --c-sky-soft: rgba(2, 132, 199, 0.09);
+  --c-violet: #7c3aed;
+  --c-violet-soft: rgba(124, 58, 237, 0.09);
+  --c-amber: #b45309;
+  --c-amber-soft: rgba(180, 83, 9, 0.08);
+  --c-rose: #be123c;
+  --c-rose-soft: rgba(190, 18, 60, 0.08);
+}
+
+/* Hero 标题与极光：多一层冷色过渡和一点暖色 */
+
+.hero-title {
+  background-image: linear-gradient(112deg, var(--text) 6%, var(--accent) 46%, var(--c-sky) 74%, var(--accent-2) 98%);
+}
+
+.hero::after {
+  background:
+    radial-gradient(420px 320px at 24% 46%, rgba(45, 212, 191, 0.16), transparent 70%),
+    radial-gradient(460px 340px at 78% 22%, rgba(129, 140, 248, 0.18), transparent 72%),
+    radial-gradient(340px 240px at 54% 84%, var(--c-amber-soft), transparent 72%);
+}
+
+/* 统计数字：三个不同色相 */
+
+.hero-stats .stat strong {
+  background-image: linear-gradient(120deg, var(--accent), var(--c-sky));
+}
+
+.hero-stats .stat:nth-child(2) strong {
+  background-image: linear-gradient(120deg, var(--c-sky), var(--accent-2));
+}
+
+.hero-stats .stat:nth-child(3) strong {
+  background-image: linear-gradient(120deg, var(--accent-2), var(--c-violet));
+}
+
+/* 文章卡片：编号、光斑、标题悬停按序轮换色相 */
+
+.post-grid > .card {
+  --card-accent: var(--accent);
+  --card-accent-soft: var(--accent-soft);
+}
+
+.post-grid > .card:nth-child(4n+2) {
+  --card-accent: var(--c-sky);
+  --card-accent-soft: var(--c-sky-soft);
+}
+
+.post-grid > .card:nth-child(4n+3) {
+  --card-accent: var(--c-violet);
+  --card-accent-soft: var(--c-violet-soft);
+}
+
+.post-grid > .card:nth-child(4n+4) {
+  --card-accent: var(--c-amber);
+  --card-accent-soft: var(--c-amber-soft);
+}
+
+.card::before {
+  background: radial-gradient(260px circle at var(--mx) var(--my), var(--card-accent-soft), transparent 70%);
+}
+
+.card-meta::before {
+  color: var(--card-accent);
+  background: var(--card-accent-soft);
+}
+
+.card:hover .card-title { color: var(--card-accent); }
+
+/* 分类卡：编号与计数上色，悬停光层跟随 */
+
+.topic {
+  --topic-accent: var(--accent);
+  --topic-soft: var(--accent-soft);
+}
+
+.topic:nth-child(4n+2) {
+  --topic-accent: var(--c-sky);
+  --topic-soft: var(--c-sky-soft);
+}
+
+.topic:nth-child(4n+3) {
+  --topic-accent: var(--c-violet);
+  --topic-soft: var(--c-violet-soft);
+}
+
+.topic:nth-child(4n+4) {
+  --topic-accent: var(--c-amber);
+  --topic-soft: var(--c-amber-soft);
+}
+
+.topic::before {
+  background: linear-gradient(135deg, var(--topic-soft), transparent 62%);
+}
+
+.topic-index { color: var(--topic-accent); opacity: 0.85; }
+
+.topic-count { color: var(--topic-accent); }
+
+.topic:hover .topic-arrow { color: var(--topic-accent); }
+
+/* 标签：三色循环，仍用低饱和底色 */
+
+.chip:nth-child(3n+2) {
+  color: var(--c-sky);
+  background: var(--c-sky-soft);
+}
+
+.chip:nth-child(3n+3) {
+  color: var(--c-violet);
+  background: var(--c-violet-soft);
+}
+
+a.chip:hover { border-color: currentColor; }
+
+/* 分类 / 标签总览页：计数轮换色相 */
+
+.taxonomy-card:nth-child(4n+2) .taxonomy-count { color: var(--c-sky); }
+.taxonomy-card:nth-child(4n+3) .taxonomy-count { color: var(--c-violet); }
+.taxonomy-card:nth-child(4n+4) .taxonomy-count { color: var(--c-amber); }
+
+/* 文章头背景补一点暖色，阅读进度改成三段渐变 */
+
+.post-hero::before {
+  background:
+    radial-gradient(520px 260px at 22% 42%, var(--glow-1), transparent 70%),
+    radial-gradient(460px 240px at 78% 20%, var(--glow-2), transparent 72%),
+    radial-gradient(320px 200px at 60% 92%, var(--c-amber-soft), transparent 72%);
+}
+
+.read-progress {
+  background: linear-gradient(90deg, var(--accent), var(--c-sky), var(--accent-2));
+}
+
+/* 页脚字标描边带一点冷色 */
+
+.footer-wordmark {
+  -webkit-text-stroke-color: var(--c-sky-soft);
+}
+
+html[data-theme="light"] .footer-wordmark {
+  -webkit-text-stroke-color: rgba(2, 132, 199, 0.2);
+}
+
+/* 目录当前项用冷色底，避免和正文强调色重复 */
+
+.toc-link.active {
+  color: var(--c-sky);
+  background: linear-gradient(90deg, var(--c-sky-soft), transparent);
+}
+
+/* 页面头部的眉标短线使用渐变 */
+
+.page-head .kicker::before,
+.post-hero .kicker::before {
+  background: linear-gradient(90deg, var(--accent), var(--c-sky), transparent);
+}
