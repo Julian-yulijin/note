@@ -514,10 +514,48 @@
     });
   }
 
+  /* ---------------- 页头状态与滚动进场 ---------------- */
+
+  function initHeaderState() {
+    var header = document.querySelector('.site-header');
+    if (!header) return;
+    function update() {
+      header.classList.toggle('scrolled', (window.scrollY || window.pageYOffset) > 6);
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+
+  function initReveal() {
+    var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced || !('IntersectionObserver' in window)) return;
+
+    var targets = document.querySelectorAll('.card, .section-head, .taxonomy-card, .tag-chip');
+    Array.prototype.forEach.call(targets, function (el, index) {
+      el.classList.add('reveal');
+      el.style.transitionDelay = Math.min(index * 35, 280) + 'ms';
+    });
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+
+    Array.prototype.forEach.call(targets, function (el) {
+      observer.observe(el);
+    });
+  }
+
   buildToc();
   initScrollUi();
   enhanceCodeBlocks();
   initLightbox();
   addHeadingAnchors();
   markExternalLinks();
+  initHeaderState();
+  initReveal();
 })();
