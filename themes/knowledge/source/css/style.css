@@ -3086,19 +3086,24 @@ html[data-theme="light"] {
   --card-accent-soft: var(--accent-soft);
 }
 
-.post-grid > .card:nth-child(4n+2) {
+.post-grid > .card:nth-child(5n+2) {
   --card-accent: var(--c-sky);
   --card-accent-soft: var(--c-sky-soft);
 }
 
-.post-grid > .card:nth-child(4n+3) {
+.post-grid > .card:nth-child(5n+3) {
   --card-accent: var(--c-violet);
   --card-accent-soft: var(--c-violet-soft);
 }
 
-.post-grid > .card:nth-child(4n+4) {
+.post-grid > .card:nth-child(5n+4) {
   --card-accent: var(--c-amber);
   --card-accent-soft: var(--c-amber-soft);
+}
+
+.post-grid > .card:nth-child(5n+5) {
+  --card-accent: var(--c-rose);
+  --card-accent-soft: var(--c-rose-soft);
 }
 
 .card::before {
@@ -3119,19 +3124,24 @@ html[data-theme="light"] {
   --topic-soft: var(--accent-soft);
 }
 
-.topic:nth-child(4n+2) {
+.topic:nth-child(5n+2) {
   --topic-accent: var(--c-sky);
   --topic-soft: var(--c-sky-soft);
 }
 
-.topic:nth-child(4n+3) {
+.topic:nth-child(5n+3) {
   --topic-accent: var(--c-violet);
   --topic-soft: var(--c-violet-soft);
 }
 
-.topic:nth-child(4n+4) {
+.topic:nth-child(5n+4) {
   --topic-accent: var(--c-amber);
   --topic-soft: var(--c-amber-soft);
+}
+
+.topic:nth-child(5n+5) {
+  --topic-accent: var(--c-rose);
+  --topic-soft: var(--c-rose-soft);
 }
 
 .topic::before {
@@ -3146,23 +3156,34 @@ html[data-theme="light"] {
 
 /* 标签：三色循环，仍用低饱和底色 */
 
-.chip:nth-child(3n+2) {
+.chip:nth-child(5n+2) {
   color: var(--c-sky);
   background: var(--c-sky-soft);
 }
 
-.chip:nth-child(3n+3) {
+.chip:nth-child(5n+3) {
   color: var(--c-violet);
   background: var(--c-violet-soft);
+}
+
+.chip:nth-child(5n+4) {
+  color: var(--c-amber);
+  background: var(--c-amber-soft);
+}
+
+.chip:nth-child(5n+5) {
+  color: var(--c-rose);
+  background: var(--c-rose-soft);
 }
 
 a.chip:hover { border-color: currentColor; }
 
 /* 分类 / 标签总览页：计数轮换色相 */
 
-.taxonomy-card:nth-child(4n+2) .taxonomy-count { color: var(--c-sky); }
-.taxonomy-card:nth-child(4n+3) .taxonomy-count { color: var(--c-violet); }
-.taxonomy-card:nth-child(4n+4) .taxonomy-count { color: var(--c-amber); }
+.taxonomy-card:nth-child(5n+2) .taxonomy-count { color: var(--c-sky); }
+.taxonomy-card:nth-child(5n+3) .taxonomy-count { color: var(--c-violet); }
+.taxonomy-card:nth-child(5n+4) .taxonomy-count { color: var(--c-amber); }
+.taxonomy-card:nth-child(5n+5) .taxonomy-count { color: var(--c-rose); }
 
 /* 文章头背景补一点暖色，阅读进度改成三段渐变 */
 
@@ -3333,34 +3354,41 @@ html[data-theme="light"] .site-footer {
 
 /* 标签总览页：标签本身带颜色 */
 
-.tag-chip:nth-child(4n+1) {
+.tag-chip:nth-child(5n+1) {
   color: var(--accent);
   border-color: rgba(45, 212, 191, 0.4);
   background: var(--accent-soft);
 }
 
-.tag-chip:nth-child(4n+2) {
+.tag-chip:nth-child(5n+2) {
   color: var(--c-sky);
   border-color: rgba(56, 189, 248, 0.4);
   background: var(--c-sky-soft);
 }
 
-.tag-chip:nth-child(4n+3) {
+.tag-chip:nth-child(5n+3) {
   color: var(--c-violet);
   border-color: rgba(129, 140, 248, 0.45);
   background: var(--c-violet-soft);
 }
 
-.tag-chip:nth-child(4n+4) {
+.tag-chip:nth-child(5n+4) {
   color: var(--c-amber);
   border-color: rgba(251, 191, 36, 0.4);
   background: var(--c-amber-soft);
 }
 
-html[data-theme="light"] .tag-chip:nth-child(4n+1) { border-color: rgba(13, 148, 136, 0.35); }
-html[data-theme="light"] .tag-chip:nth-child(4n+2) { border-color: rgba(2, 132, 199, 0.35); }
-html[data-theme="light"] .tag-chip:nth-child(4n+3) { border-color: rgba(124, 58, 237, 0.35); }
-html[data-theme="light"] .tag-chip:nth-child(4n+4) { border-color: rgba(180, 83, 9, 0.35); }
+.tag-chip:nth-child(5n+5) {
+  color: var(--c-rose);
+  border-color: rgba(251, 113, 133, 0.45);
+  background: var(--c-rose-soft);
+}
+
+html[data-theme="light"] .tag-chip:nth-child(5n+1) { border-color: rgba(13, 148, 136, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(5n+2) { border-color: rgba(2, 132, 199, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(5n+3) { border-color: rgba(124, 58, 237, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(5n+4) { border-color: rgba(180, 83, 9, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(5n+5) { border-color: rgba(190, 18, 60, 0.35); }
 
 /* 正文内部：表格、引用、行内代码与标题分隔线带颜色 */
 
@@ -3400,3 +3428,151 @@ html[data-theme="light"] .post-content :not(pre) > code {
 .post-content a {
   text-decoration-color: var(--c-sky);
 }
+
+/* ==========================================================================
+   1.2.6.0 对比色 — 青绿 × 珊瑚玫瑰，冷暖并置
+   ========================================================================== */
+
+/* 全页光层：加入暖色，与冷色形成对角对比 */
+
+.page-glow {
+  background:
+    radial-gradient(760px 520px at 8% -6%, rgba(45, 212, 191, 0.22), transparent 66%),
+    radial-gradient(820px 560px at 92% -4%, rgba(129, 140, 248, 0.24), transparent 68%),
+    radial-gradient(760px 540px at 4% 104%, rgba(251, 113, 133, 0.14), transparent 70%),
+    radial-gradient(680px 500px at 90% 90%, rgba(251, 191, 36, 0.1), transparent 70%);
+}
+
+html[data-theme="light"] .page-glow {
+  background:
+    radial-gradient(760px 520px at 8% -6%, rgba(13, 148, 136, 0.12), transparent 66%),
+    radial-gradient(820px 560px at 92% -4%, rgba(99, 102, 241, 0.12), transparent 68%),
+    radial-gradient(760px 540px at 4% 104%, rgba(225, 29, 72, 0.07), transparent 70%),
+    radial-gradient(680px 500px at 90% 90%, rgba(180, 83, 9, 0.06), transparent 70%);
+}
+
+/* Hero 极光补暖色 */
+
+.hero::after {
+  background:
+    radial-gradient(460px 340px at 22% 44%, rgba(45, 212, 191, 0.28), transparent 68%),
+    radial-gradient(480px 360px at 76% 26%, rgba(129, 140, 248, 0.3), transparent 70%),
+    radial-gradient(400px 300px at 10% 90%, rgba(251, 113, 133, 0.18), transparent 72%),
+    radial-gradient(340px 240px at 58% 92%, rgba(251, 191, 36, 0.1), transparent 72%);
+}
+
+/* 终端描边：青 → 蓝 → 紫 → 珊瑚 */
+
+.hero-console {
+  background:
+    linear-gradient(160deg, rgba(30, 41, 59, 0.74), rgba(7, 10, 15, 0.94)) padding-box,
+    linear-gradient(135deg, rgba(45, 212, 191, 0.6), rgba(56, 189, 248, 0.35) 36%, rgba(129, 140, 248, 0.55) 68%, rgba(251, 113, 133, 0.55)) border-box;
+}
+
+html[data-theme="light"] .hero-console {
+  background:
+    linear-gradient(160deg, #ffffff, #eef3fa) padding-box,
+    linear-gradient(135deg, rgba(13, 148, 136, 0.5), rgba(2, 132, 199, 0.3) 36%, rgba(99, 102, 241, 0.45) 68%, rgba(225, 29, 72, 0.4)) border-box;
+}
+
+/* 卡片悬停描边：自身色相 → 珊瑚 */
+
+.card::after {
+  background: linear-gradient(135deg, var(--card-accent, var(--accent)), var(--c-rose));
+}
+
+.card-featured .card-link::before {
+  background:
+    radial-gradient(circle at 72% 26%, rgba(251, 113, 133, 0.2), transparent 62%),
+    radial-gradient(circle at 30% 72%, var(--glow-1), transparent 64%);
+}
+
+/* 统计数字：中间一列改用暖色渐变 */
+
+.hero-stats .stat:nth-child(2) strong {
+  background-image: linear-gradient(120deg, var(--c-amber), var(--c-rose));
+}
+
+.hero-stats .stat:nth-child(3) strong {
+  background-image: linear-gradient(120deg, var(--c-violet), var(--c-sky));
+}
+
+/* 文章标题带：尾段加入珊瑚色 */
+
+.post-hero {
+  background:
+    linear-gradient(112deg, rgba(45, 212, 191, 0.11), rgba(56, 189, 248, 0.06) 34%, rgba(129, 140, 248, 0.11) 62%, rgba(251, 113, 133, 0.09) 88%, transparent),
+    linear-gradient(180deg, var(--bg-soft), transparent);
+}
+
+html[data-theme="light"] .post-hero {
+  background:
+    linear-gradient(112deg, rgba(13, 148, 136, 0.09), rgba(2, 132, 199, 0.05) 34%, rgba(99, 102, 241, 0.09) 62%, rgba(225, 29, 72, 0.07) 88%, transparent),
+    linear-gradient(180deg, var(--bg-soft), transparent);
+}
+
+/* 页脚：冷色在左、暖色在右 */
+
+.site-footer {
+  background:
+    radial-gradient(720px 320px at 10% 0%, rgba(45, 212, 191, 0.1), transparent 70%),
+    radial-gradient(720px 340px at 90% 0%, rgba(251, 113, 133, 0.1), transparent 70%),
+    radial-gradient(520px 260px at 50% 0%, rgba(129, 140, 248, 0.08), transparent 72%),
+    var(--bg-soft);
+}
+
+html[data-theme="light"] .site-footer {
+  background:
+    radial-gradient(720px 320px at 10% 0%, rgba(13, 148, 136, 0.07), transparent 70%),
+    radial-gradient(720px 340px at 90% 0%, rgba(225, 29, 72, 0.06), transparent 70%),
+    radial-gradient(520px 260px at 50% 0%, rgba(99, 102, 241, 0.06), transparent 72%),
+    var(--bg-soft);
+}
+
+/* 阅读进度：四段冷暖渐变 */
+
+.read-progress {
+  background: linear-gradient(90deg, var(--accent), var(--c-sky) 36%, var(--accent-2) 68%, var(--c-rose));
+}
+
+/* 区块分隔线与眉标短线补暖色 */
+
+.section-head::after {
+  background: linear-gradient(90deg, var(--accent-soft), var(--c-sky-soft) 32%, var(--c-rose-soft) 62%, transparent 90%);
+}
+
+.page-head .kicker::before,
+.post-hero .kicker::before {
+  background: linear-gradient(90deg, var(--accent), var(--c-sky) 52%, var(--c-rose), transparent);
+}
+
+/* 引用块：冷色底 + 珊瑚描边 */
+
+.post-content blockquote {
+  border-left-color: var(--c-rose);
+  background: linear-gradient(100deg, var(--accent-soft), var(--c-rose-soft) 62%, transparent);
+}
+
+/* 主按钮与品牌标：青绿到珊瑚的直接对比 */
+
+.btn-primary {
+  color: #04141a;
+  background: linear-gradient(135deg, var(--accent), var(--c-rose));
+  box-shadow: 0 16px 38px -20px rgba(251, 113, 133, 0.55);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 22px 46px -20px rgba(251, 113, 133, 0.6);
+}
+
+html[data-theme="light"] .btn-primary {
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--accent), var(--c-rose));
+  box-shadow: 0 16px 38px -20px rgba(190, 18, 60, 0.4);
+}
+
+.brand-mark {
+  background: linear-gradient(135deg, var(--accent), var(--c-rose));
+}
+
+html[data-theme="light"] .brand-mark { color: #ffffff; }
