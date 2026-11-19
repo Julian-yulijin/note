@@ -320,8 +320,31 @@
       });
     }
 
-    var links = Array.prototype.slice.call(document.querySelectorAll('#toc-nav .toc-link, #toc-nav-mobile .toc-link'));
+    var desktopLinks = Array.prototype.slice.call(nav.querySelectorAll('.toc-link'));
+    var mobileLinks = mobileNav ? Array.prototype.slice.call(mobileNav.querySelectorAll('.toc-link')) : [];
     var ticking = false;
+    var lastIndex = -1;
+
+    function setActive(list, index) {
+      list.forEach(function (link, i) {
+        link.classList.toggle('active', i === index);
+      });
+    }
+
+    function scrollTocTo(index) {
+      var activeLink = desktopLinks[index];
+      if (!activeLink) return;
+      if (toc.scrollHeight <= toc.clientHeight + 4) return;
+      var top = activeLink.offsetTop;
+      var bottom = top + activeLink.offsetHeight;
+      var viewTop = toc.scrollTop;
+      var viewBottom = viewTop + toc.clientHeight;
+      if (top < viewTop + 8) {
+        toc.scrollTop = Math.max(0, top - 8);
+      } else if (bottom > viewBottom - 8) {
+        toc.scrollTop = bottom - toc.clientHeight + 8;
+      }
+    }
 
     function updateActive() {
       var offset = window.scrollY + 110;
@@ -330,9 +353,12 @@
         var top = heading.getBoundingClientRect().top + window.scrollY;
         if (top <= offset) current = index;
       });
-      links.forEach(function (link, index) {
-        link.classList.toggle('active', index === current);
-      });
+      setActive(desktopLinks, current);
+      setActive(mobileLinks, current);
+      if (current !== lastIndex) {
+        lastIndex = current;
+        scrollTocTo(current);
+      }
       ticking = false;
     }
 
