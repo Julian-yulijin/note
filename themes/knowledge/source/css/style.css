@@ -3576,3 +3576,98 @@ html[data-theme="light"] .btn-primary {
 }
 
 html[data-theme="light"] .brand-mark { color: #ffffff; }
+
+/* ==========================================================================
+   1.2.7.0 文章内容背景 — 阅读面板、色光底与分区标题
+   ========================================================================== */
+
+.post-body {
+  position: relative;
+  isolation: isolate;
+}
+
+.post-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 26px;
+  pointer-events: none;
+  background:
+    radial-gradient(520px 360px at 2% 4%, rgba(45, 212, 191, 0.11), transparent 70%),
+    radial-gradient(540px 380px at 98% 22%, rgba(129, 140, 248, 0.12), transparent 72%),
+    radial-gradient(480px 340px at 46% 96%, rgba(251, 113, 133, 0.07), transparent 72%);
+}
+
+.post-main {
+  padding: 38px 40px 46px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background:
+    linear-gradient(155deg, rgba(45, 212, 191, 0.07), transparent 44%),
+    linear-gradient(200deg, rgba(129, 140, 248, 0.08), transparent 62%),
+    var(--surface);
+  box-shadow: 0 34px 70px -52px rgba(0, 0, 0, 0.95);
+}
+
+html[data-theme="light"] .post-main {
+  background:
+    linear-gradient(155deg, rgba(13, 148, 136, 0.06), transparent 44%),
+    linear-gradient(200deg, rgba(99, 102, 241, 0.06), transparent 62%),
+    rgba(255, 255, 255, 0.9);
+  box-shadow: 0 24px 56px -44px rgba(15, 23, 42, 0.35);
+}
+
+/* 二级标题：淡色带 + 左侧强调线 */
+
+.post-content h2 {
+  margin: 44px 0 16px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--accent-soft), rgba(129, 140, 248, 0.07) 58%, transparent 94%);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+html[data-theme="light"] .post-content h2 {
+  background: linear-gradient(90deg, rgba(13, 148, 136, 0.09), rgba(99, 102, 241, 0.06) 58%, transparent 94%);
+}
+
+/* 目录卡与代码块：与面板呼应 */
+
+.toc {
+  background:
+    linear-gradient(180deg, rgba(45, 212, 191, 0.06), transparent 42%),
+    var(--surface);
+}
+
+.post-content pre,
+.post-content .highlight,
+.post-content .code-block {
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.post-content img {
+  border-radius: 12px;
+  box-shadow: 0 18px 40px -30px rgba(0, 0, 0, 0.8);
+}
+
+@media (max-width: 1024px) {
+  .post-main {
+    padding: 30px 28px 38px;
+    border-radius: 18px;
+  }
+}
+
+@media (max-width: 720px) {
+  .post-main {
+    padding: 22px 18px 30px;
+    border-radius: 16px;
+  }
+
+  .post-content h2 {
+    margin: 36px 0 14px;
+    padding: 8px 12px;
+  }
+
+  .post-body::before { border-radius: 18px; }
+}
