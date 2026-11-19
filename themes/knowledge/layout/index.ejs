@@ -1,22 +1,66 @@
 <% var posts = page.posts; %>
 <% if (theme.hero && theme.hero.enable !== false) { %>
 <section class="hero">
-  <div class="wrap hero-inner">
-    <p class="hero-kicker"><%= theme.hero.kicker || '// KNOWLEDGE BASE' %></p>
-    <h1 class="hero-title"><%= theme.hero.title || config.title %></h1>
-    <p class="hero-sub"><%= theme.hero.subtitle || config.subtitle %></p>
-    <% if (theme.hero.description) { %><p class="hero-desc"><%= theme.hero.description %></p><% } %>
-    <div class="hero-stats">
-      <div class="stat"><strong><%= site.posts.length %></strong><span>篇文章</span></div>
-      <div class="stat"><strong><%= site.categories.length %></strong><span>个分类</span></div>
-      <div class="stat"><strong><%= site.tags.length %></strong><span>个标签</span></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="hero-kicker"><%= theme.hero.kicker || '// KNOWLEDGE BASE' %></p>
+      <h1 class="hero-title"><%= theme.hero.title || config.title %></h1>
+      <p class="hero-sub"><%= theme.hero.subtitle || config.subtitle %></p>
+      <% if (theme.hero.description) { %><p class="hero-desc"><%= theme.hero.description %></p><% } %>
+      <div class="hero-actions">
+        <% if (theme.hero.primary_action) { %>
+        <a class="btn btn-primary" href="<%- url_for(theme.hero.primary_action.link || '/archives/') %>"><%= theme.hero.primary_action.text || '浏览归档' %></a>
+        <% } %>
+        <button class="btn btn-ghost" type="button" data-open-search>全站搜索 <kbd>Ctrl K</kbd></button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><strong><%= site.posts.length %></strong><span>篇文章</span></div>
+        <div class="stat"><strong><%= site.categories.length %></strong><span>个分类</span></div>
+        <div class="stat"><strong><%= site.tags.length %></strong><span>个标签</span></div>
+      </div>
     </div>
-    <div class="hero-actions">
-      <% if (theme.hero.primary_action) { %>
-      <a class="btn btn-primary" href="<%- url_for(theme.hero.primary_action.link || '/archives/') %>"><%= theme.hero.primary_action.text || '浏览归档' %></a>
-      <% } %>
-      <button class="btn btn-ghost" type="button" data-open-search>全站搜索 <kbd>Ctrl K</kbd></button>
-    </div>
+
+    <aside class="hero-console" aria-hidden="true">
+      <div class="console-bar">
+        <span class="console-dot"></span>
+        <span class="console-dot"></span>
+        <span class="console-dot"></span>
+        <span class="console-title">~/knowledge</span>
+      </div>
+      <div class="console-body">
+        <p class="console-line"><span class="console-prompt">$</span>hexo generate<span class="console-comment"> --deploy</span></p>
+        <p class="console-ok">✓ <strong><%= site.posts.length %></strong> 篇文章已索引</p>
+        <p class="console-line"><span class="console-prompt">$</span>ls latest</p>
+        <div class="console-list">
+          <% var shown = 0; posts.each(function (post) { if (shown < 3) { shown++; %>
+          <p class="console-item">
+            <span class="console-date"><%= date(post.date, 'MM-DD') %></span>
+            <span class="console-file"><%= post.title %></span>
+          </p>
+          <% } }); %>
+        </div>
+        <p class="console-line"><span class="console-prompt">$</span><span class="console-cursor"></span></p>
+      </div>
+    </aside>
+  </div>
+</section>
+<% } %>
+
+<% if (site.categories.length) { %>
+<section class="wrap section section-topics">
+  <div class="section-head">
+    <h2 class="section-title">主题分类</h2>
+    <a class="section-link" href="<%- url_for('/categories/') %>">全部分类 →</a>
+  </div>
+  <div class="topic-grid">
+    <% var topicIndex = 0; site.categories.sort('name').each(function (category) { if (topicIndex < 6) { topicIndex++; %>
+    <a class="topic" href="<%- url_for(category.path) %>">
+      <span class="topic-index"><%= (topicIndex < 10 ? '0' : '') + topicIndex %></span>
+      <span class="topic-name"><%= category.name %></span>
+      <span class="topic-count"><%= category.length %> 篇</span>
+      <span class="topic-arrow" aria-hidden="true">→</span>
+    </a>
+    <% } }); %>
   </div>
 </section>
 <% } %>
@@ -28,8 +72,8 @@
   </div>
   <% if (posts.length) { %>
   <div class="post-grid">
-    <% posts.each(function (post) { %>
-      <%- partial('_partial/post-card', { post: post }) %>
+    <% posts.each(function (post, index) { %>
+      <%- partial('_partial/post-card', { post: post, featured: index === 0 }) %>
     <% }) %>
   </div>
   <% } else { %>

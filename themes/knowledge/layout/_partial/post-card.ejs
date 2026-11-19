@@ -4,7 +4,7 @@
   var words = strip_html(post.content).replace(/\s+/g, '').length;
   var minutes = Math.max(1, Math.ceil(words / 350));
 %>
-<article class="card">
+<article class="card<%= typeof featured !== 'undefined' && featured ? ' card-featured' : '' %>">
   <a class="card-link" href="<%- url_for(post.path) %>">
     <div class="card-meta">
       <time datetime="<%= post.date.toISOString() %>"><%= date(post.date, 'YYYY-MM-DD') %></time>

@@ -530,7 +530,7 @@
     var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced || !('IntersectionObserver' in window)) return;
 
-    var targets = document.querySelectorAll('.card, .section-head, .taxonomy-card, .tag-chip');
+    var targets = document.querySelectorAll('.card, .section-head, .taxonomy-card, .tag-chip, .topic');
     Array.prototype.forEach.call(targets, function (el, index) {
       el.classList.add('reveal');
       el.style.transitionDelay = Math.min(index * 35, 280) + 'ms';

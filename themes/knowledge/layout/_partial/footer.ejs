@@ -1,6 +1,40 @@
 <footer class="site-footer">
-  <div class="wrap footer-inner">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href="<%- url_for('/') %>">
+        <span class="brand-mark" aria-hidden="true">K</span>
+        <span class="brand-text">
+          <strong><%= config.title %></strong>
+          <% if (config.subtitle) { %><small><%= config.subtitle %></small><% } %>
+        </span>
+      </a>
+      <p class="footer-desc"><%= theme.footer_text || '知识需要被记录，也需要被检索。' %></p>
+    </div>
+
+    <nav class="footer-col" aria-label="页脚导航">
+      <p class="footer-title">导航</p>
+      <% Object.keys(theme.menu || {}).forEach(function (name) { %>
+      <a class="footer-link" href="<%- url_for(theme.menu[name]) %>"><%= name %></a>
+      <% }) %>
+    </nav>
+
+    <div class="footer-col">
+      <p class="footer-title">标签</p>
+      <% var tagCount = 0; site.tags.sort('name').each(function (tag) { if (tagCount < 5) { tagCount++; %>
+      <a class="footer-link" href="<%- url_for(tag.path) %>"># <%= tag.name %></a>
+      <% } }); %>
+      <% if (!tagCount) { %><span class="footer-link muted">暂无标签</span><% } %>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-title">关于</p>
+      <p class="footer-about">一个持续生长的个人知识库，记录技术笔记、实践记录与思考。</p>
+      <a class="footer-link" href="<%- url_for('/archives/') %>">全部归档 →</a>
+    </div>
+  </div>
+
+  <div class="wrap footer-bottom">
     <p>© <%= new Date().getFullYear() %> <%= config.author || config.title %> · 由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动</p>
-    <p class="footer-note"><%= theme.footer_text || '知识需要被记录，也需要被检索。' %></p>
+    <p class="footer-note">KNOWLEDGE BASE · BUILT TO BE SEARCHED</p>
   </div>
 </footer>
