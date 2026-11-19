@@ -3,6 +3,7 @@
 <%- partial('_partial/head') %>
 <body data-root="<%- url_for('/') %>">
   <div class="page-glow" aria-hidden="true"></div>
+  <div class="read-progress" id="read-progress" aria-hidden="true"></div>
   <%- partial('_partial/header') %>
 
   <main class="site-main" id="main">
@@ -25,6 +26,17 @@
       </div>
       <div class="search-hint">↑ ↓ 选择 · Enter 打开 · Esc 关闭</div>
     </div>
+  </div>
+
+  <button class="back-top" id="back-top" type="button" aria-label="返回顶部" title="返回顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7"></path>
+    </svg>
+  </button>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" id="lightbox-close" aria-label="关闭">×</button>
+    <img alt="">
   </div>
 
   <script src="<%- url_for('js/app.js') %>" defer></script>

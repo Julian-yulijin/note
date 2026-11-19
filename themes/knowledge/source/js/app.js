@@ -113,30 +113,45 @@
     if (items[index]) items[index].scrollIntoView({ block: 'nearest' });
   }
 
-  function makeSnippet(item, token) {
+  function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function makeSnippet(item, tokens) {
     var frag = document.createDocumentFragment();
     var text = item.plain || '';
-    var pos = token ? text.toLowerCase().indexOf(token) : -1;
+    if (!tokens || !tokens.length) {
+      frag.appendChild(document.createTextNode(text.slice(0, 120)));
+      return frag;
+    }
+    var lower = text.toLowerCase();
+    var pos = -1;
+    tokens.forEach(function (token) {
+      var at = lower.indexOf(token);
+      if (at !== -1 && (pos === -1 || at < pos)) pos = at;
+    });
     var start = pos > 40 ? pos - 40 : 0;
     var snippet = text.slice(start, start + 120);
-    if (!token) {
-      frag.appendChild(document.createTextNode(snippet));
-      return frag;
+    var re = new RegExp('(' + tokens.map(escapeRegExp).join('|') + ')', 'gi');
+    var last = 0;
+    var match;
+    while ((match = re.exec(snippet)) !== null) {
+      if (match.index > last) {
+        frag.appendChild(document.createTextNode(snippet.slice(last, match.index)));
+      }
+      var mark = document.createElement('mark');
+      mark.textContent = match[0];
+      frag.appendChild(mark);
+      last = match.index + match[0].length;
+      if (!match[0]) re.lastIndex++;
     }
-    var at = snippet.toLowerCase().indexOf(token);
-    if (at === -1) {
-      frag.appendChild(document.createTextNode(snippet));
-      return frag;
+    if (last < snippet.length) {
+      frag.appendChild(document.createTextNode(snippet.slice(last)));
     }
-    frag.appendChild(document.createTextNode(snippet.slice(0, at)));
-    var mark = document.createElement('mark');
-    mark.textContent = snippet.slice(at, at + token.length);
-    frag.appendChild(mark);
-    frag.appendChild(document.createTextNode(snippet.slice(at + token.length)));
     return frag;
   }
 
-  function renderResults(list, token) {
+  function renderResults(list, tokens) {
     if (!resultsBox) return;
     resultsBox.innerHTML = '';
     if (!list.length) {
@@ -153,7 +168,7 @@
       var title = document.createElement('h4');
       title.textContent = item.title;
       var desc = document.createElement('p');
-      desc.appendChild(makeSnippet(item, token));
+      desc.appendChild(makeSnippet(item, tokens));
       link.appendChild(title);
       link.appendChild(desc);
       link.addEventListener('mouseenter', function () { setActive(index); });
@@ -182,7 +197,7 @@
     scored.sort(function (a, b) { return b.score - a.score; });
     currentResults = scored.slice(0, 20).map(function (entry) { return entry.item; });
     activeIndex = currentResults.length ? 0 : -1;
-    renderResults(currentResults, tokens[0]);
+    renderResults(currentResults, tokens);
   }
 
   function openSearch() {
@@ -312,5 +327,197 @@
     updateActive();
   }
 
+  /* ---------------- 阅读进度 / 返回顶部 ---------------- */
+
+  function initScrollUi() {
+    var progressBar = document.getElementById('read-progress');
+    var backTop = document.getElementById('back-top');
+    var content = document.getElementById('post-content');
+    if (!progressBar && !backTop) return;
+
+    var ticking = false;
+
+    function update() {
+      var y = window.scrollY || window.pageYOffset;
+      if (progressBar && content) {
+        var start = content.getBoundingClientRect().top + y - 120;
+        var span = Math.max(1, content.offsetHeight - window.innerHeight + 240);
+        var ratio = Math.min(1, Math.max(0, (y - start) / span));
+        progressBar.style.width = (ratio * 100).toFixed(2) + '%';
+      }
+      if (backTop) backTop.classList.toggle('show', y > 600);
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+
+    if (backTop) {
+      backTop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  }
+
+  /* ---------------- 代码块：语言标签与复制 ---------------- */
+
+  function copyText(text, button) {
+    function done() {
+      button.textContent = '已复制';
+      button.classList.add('copied');
+      setTimeout(function () {
+        button.textContent = '复制';
+        button.classList.remove('copied');
+      }, 1600);
+    }
+
+    function fallback() {
+      var area = document.createElement('textarea');
+      area.value = text;
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      try {
+        document.execCommand('copy');
+        done();
+      } catch (e) {}
+      document.body.removeChild(area);
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  function enhanceCodeBlocks() {
+    var content = document.getElementById('post-content');
+    if (!content) return;
+
+    var blocks = content.querySelectorAll('figure.highlight, pre');
+    Array.prototype.forEach.call(blocks, function (block) {
+      if (block.parentNode && block.parentNode.classList.contains('code-block')) return;
+      if (block.tagName === 'PRE' && block.parentNode && block.parentNode.closest('figure.highlight')) return;
+
+      var wrapper = document.createElement('div');
+      wrapper.className = 'code-block';
+      block.parentNode.insertBefore(wrapper, block);
+      wrapper.appendChild(block);
+
+      var lang = '';
+      var codeEl = block.querySelector('td.code pre') || block.querySelector('pre') || block.querySelector('code');
+      var className = (codeEl && codeEl.className) || '';
+      var matched = className.match(/language-([\w-]+)/);
+      if (matched) lang = matched[1];
+      if (!lang) {
+        Array.prototype.forEach.call(block.classList, function (name) {
+          if (lang || name === 'highlight' || name === 'table' || name === 'code' || name === 'gutter') return;
+          lang = name;
+        });
+      }
+
+      var toolbar = document.createElement('div');
+      toolbar.className = 'code-toolbar';
+
+      if (lang) {
+        var label = document.createElement('span');
+        label.className = 'code-lang';
+        label.textContent = lang;
+        toolbar.appendChild(label);
+      }
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-btn';
+      button.textContent = '复制';
+      button.setAttribute('aria-label', '复制代码');
+      button.addEventListener('click', function () {
+        var target = block.querySelector('td.code pre') || block.querySelector('pre') || block;
+        copyText(target.innerText, button);
+      });
+      toolbar.appendChild(button);
+      wrapper.appendChild(toolbar);
+    });
+  }
+
+  /* ---------------- 图片灯箱 ---------------- */
+
+  function initLightbox() {
+    var content = document.getElementById('post-content');
+    var lightbox = document.getElementById('lightbox');
+    if (!content || !lightbox) return;
+    var image = lightbox.querySelector('img');
+    var close = document.getElementById('lightbox-close');
+    if (!image) return;
+
+    function open(src, alt) {
+      image.src = src;
+      image.alt = alt || '';
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      body.classList.add('lightbox-open');
+    }
+
+    function hide() {
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      body.classList.remove('lightbox-open');
+      image.removeAttribute('src');
+    }
+
+    Array.prototype.forEach.call(content.querySelectorAll('img'), function (img) {
+      img.addEventListener('click', function () {
+        open(img.currentSrc || img.src, img.alt);
+      });
+    });
+
+    lightbox.addEventListener('click', function (event) {
+      if (event.target === lightbox || event.target === close) hide();
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && lightbox.classList.contains('open')) hide();
+    });
+  }
+
+  /* ---------------- 标题锚点与外部链接 ---------------- */
+
+  function addHeadingAnchors() {
+    var content = document.getElementById('post-content');
+    if (!content) return;
+    Array.prototype.forEach.call(content.querySelectorAll('h2[id], h3[id]'), function (heading) {
+      if (heading.querySelector('.heading-anchor')) return;
+      var anchor = document.createElement('a');
+      anchor.className = 'heading-anchor';
+      anchor.href = '#' + heading.id;
+      anchor.textContent = '#';
+      anchor.setAttribute('aria-label', '链接到本节');
+      heading.appendChild(anchor);
+    });
+  }
+
+  function markExternalLinks() {
+    var content = document.getElementById('post-content');
+    if (!content) return;
+    Array.prototype.forEach.call(content.querySelectorAll('a[href^="http"]'), function (link) {
+      if (link.hostname && link.hostname !== window.location.hostname) {
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+      }
+    });
+  }
+
   buildToc();
+  initScrollUi();
+  enhanceCodeBlocks();
+  initLightbox();
+  addHeadingAnchors();
+  markExternalLinks();
 })();

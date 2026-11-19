@@ -7,6 +7,12 @@
   <meta name="description" content="<%= page.description || config.description %>">
   <% } %>
   <link rel="icon" type="image/svg+xml" href="<%- url_for('images/favicon.svg') %>">
+  <link rel="canonical" href="<%- full_url_for(page.path || '') %>">
+  <meta property="og:site_name" content="<%= config.title %>">
+  <meta property="og:type" content="<%= page.layout === 'post' ? 'article' : 'website' %>">
+  <meta property="og:title" content="<%= page.title ? page.title + ' · ' + config.title : config.title %>">
+  <meta property="og:description" content="<%= page.description || config.description || '' %>">
+  <meta property="og:url" content="<%- full_url_for(page.path || '') %>">
   <link rel="stylesheet" href="<%- url_for('css/style.css') %>">
   <script>
     (function () {

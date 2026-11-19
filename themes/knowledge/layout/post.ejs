@@ -8,6 +8,10 @@
       <time datetime="<%= page.date.toISOString() %>"><%= date(page.date, 'YYYY-MM-DD') %></time>
       <span class="dot">·</span>
       <span><%= minutes %> 分钟阅读</span>
+      <% if (page.updated && page.updated.valueOf() - page.date.valueOf() > 60000) { %>
+      <span class="dot">·</span>
+      <span>更新于 <%= date(page.updated, 'YYYY-MM-DD') %></span>
+      <% } %>
       <% if (page.categories && page.categories.length) { %>
       <span class="dot">·</span>
       <% page.categories.each(function (category, i) { %>
