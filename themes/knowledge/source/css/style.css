@@ -3875,3 +3875,158 @@ html[data-theme="light"] .post-main {
     font-size: 21px;
   }
 }
+
+/* ==========================================================================
+   1.2.9.0 阅读增强 — 更大字号、章节色带、导引线、段落聚焦
+   ========================================================================== */
+
+html[data-theme="dark"] { --reading-text: #d4dfea; }
+html[data-theme="light"] { --reading-text: #1e2b3f; }
+
+/* 面板四角加入极淡的冷暖色，正文区域仍然干净 */
+
+.post-main {
+  background:
+    radial-gradient(660px 440px at 102% 0%, rgba(129, 140, 248, 0.06), transparent 72%),
+    radial-gradient(580px 400px at -4% 100%, rgba(251, 113, 133, 0.05), transparent 74%),
+    linear-gradient(180deg, var(--reading-panel), var(--reading-panel-2));
+}
+
+html[data-theme="light"] .post-main {
+  background:
+    radial-gradient(660px 440px at 102% 0%, rgba(99, 102, 241, 0.05), transparent 72%),
+    radial-gradient(580px 400px at -4% 100%, rgba(225, 29, 72, 0.035), transparent 74%),
+    linear-gradient(180deg, #ffffff, #f8fafc);
+}
+
+.post-content {
+  position: relative;
+  font-size: 17.5px;
+  line-height: 1.92;
+  letter-spacing: 0.012em;
+}
+
+/* 左侧渐变导引线，帮助视线纵向定位 */
+
+.post-content::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--c-sky) 30%, var(--accent-2) 64%, var(--c-rose));
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.post-content p {
+  margin-bottom: 24px;
+  line-height: 1.92;
+}
+
+.post-content > p:first-of-type {
+  font-size: 18px;
+  line-height: 1.86;
+}
+
+.post-content h2 {
+  position: relative;
+  margin-top: 54px;
+  font-size: 23.5px;
+}
+
+/* 章节节点：左侧导引线上的彩色圆点 */
+
+.post-content h2::before {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--reading-panel);
+}
+
+.post-content h2:nth-of-type(3n+2) {
+  background: linear-gradient(90deg, var(--c-violet-soft), rgba(251, 113, 133, 0.05) 62%, transparent 96%);
+  box-shadow: inset 3px 0 0 var(--c-violet);
+}
+
+.post-content h2:nth-of-type(3n+2)::before { background: var(--c-violet); }
+
+.post-content h2:nth-of-type(3n) {
+  background: linear-gradient(90deg, var(--c-rose-soft), rgba(251, 191, 36, 0.04) 62%, transparent 96%);
+  box-shadow: inset 3px 0 0 var(--c-rose);
+}
+
+.post-content h2:nth-of-type(3n)::before { background: var(--c-rose); }
+
+.post-content strong {
+  color: var(--text);
+  padding: 0 2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, transparent 62%, var(--accent-soft) 62%);
+}
+
+html[data-theme="light"] .post-content strong {
+  background: linear-gradient(180deg, transparent 62%, rgba(13, 148, 136, 0.14) 62%);
+}
+
+.post-content li { margin: 9px 0; }
+
+.post-content blockquote { font-size: 17px; }
+
+/* 表格斑马纹，长表格更易横向追行 */
+
+.post-content > table tbody tr:nth-child(even) {
+  background: rgba(148, 163, 184, 0.045);
+}
+
+.post-content > table tbody tr:hover {
+  background: var(--accent-soft);
+}
+
+html[data-theme="light"] .post-content > table tbody tr:nth-child(even) {
+  background: rgba(15, 23, 42, 0.028);
+}
+
+.post-content a:not(.heading-anchor):hover {
+  background-color: var(--accent-soft);
+}
+
+/* 鼠标所在段落轻微提亮，减少长文串行 */
+
+@media (hover: hover) and (pointer: fine) {
+  .post-content > p {
+    padding: 2px 8px;
+    margin-left: -8px;
+    margin-right: -8px;
+    border-radius: 6px;
+    transition: background-color 0.18s ease;
+  }
+
+  .post-content > p:hover {
+    background-color: rgba(45, 212, 191, 0.04);
+  }
+}
+
+@media (max-width: 720px) {
+  .post-content {
+    font-size: 17px;
+    line-height: 1.9;
+  }
+
+  .post-content p { line-height: 1.9; }
+
+  .post-content::before {
+    left: -12px;
+    opacity: 0.22;
+  }
+
+  .post-content h2::before { left: -16px; }
+}
