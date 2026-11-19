@@ -3671,3 +3671,207 @@ html[data-theme="light"] .post-content h2 {
 
   .post-body::before { border-radius: 18px; }
 }
+
+/* ==========================================================================
+   1.2.8.0 阅读体验 — 稳定底、清晰层级、舒适行距
+   ========================================================================== */
+
+html[data-theme="dark"] {
+  --reading-text: #ccd8e5;
+  --reading-panel: #0c1219;
+  --reading-panel-2: #0a0f16;
+}
+
+html[data-theme="light"] {
+  --reading-text: #263348;
+  --reading-panel: #ffffff;
+  --reading-panel-2: #f8fafc;
+}
+
+/* 噪点层退到内容之下，不再盖在文字上 */
+
+.grain { z-index: 0; }
+
+/* 阅读面板：接近纯色，保留极轻的顶部冷光 */
+
+.post-main {
+  position: relative;
+  padding: 42px 44px 50px;
+  background:
+    linear-gradient(180deg, rgba(45, 212, 191, 0.035), transparent 24%),
+    linear-gradient(180deg, var(--reading-panel), var(--reading-panel-2));
+  box-shadow:
+    0 40px 80px -60px rgba(0, 0, 0, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+html[data-theme="light"] .post-main {
+  background:
+    linear-gradient(180deg, rgba(13, 148, 136, 0.03), transparent 24%),
+    linear-gradient(180deg, #ffffff, #f9fbfd);
+  box-shadow:
+    0 30px 60px -48px rgba(15, 23, 42, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* 面板顶部一条彩色细线，作为唯一装饰 */
+
+.post-main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 32px;
+  right: 32px;
+  height: 2px;
+  border-radius: 0 0 2px 2px;
+  background: linear-gradient(90deg, transparent, var(--accent) 18%, var(--c-sky) 50%, var(--c-rose) 82%, transparent);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* 正文基础排版 */
+
+.post-content {
+  font-size: 17px;
+  line-height: 1.9;
+  letter-spacing: 0.008em;
+  color: var(--reading-text);
+  text-rendering: optimizeLegibility;
+}
+
+.post-content p {
+  margin: 0 0 22px;
+  line-height: 1.9;
+  text-align: justify;
+  text-justify: inter-ideograph;
+  text-wrap: pretty;
+}
+
+.post-content > p:first-of-type {
+  font-size: 17.6px;
+  line-height: 1.84;
+  color: var(--text);
+}
+
+.post-content strong { color: var(--text); font-weight: 600; }
+
+/* 标题层级：字号收紧，间距加大 */
+
+.post-content h2 {
+  margin: 48px 0 18px;
+  padding: 8px 14px 9px 16px;
+  font-size: 23px;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  background: linear-gradient(90deg, var(--accent-soft), rgba(129, 140, 248, 0.05) 62%, transparent 96%);
+}
+
+.post-content h3 {
+  margin: 34px 0 12px;
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+.post-content h4 {
+  margin: 24px 0 10px;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+/* 列表与引用 */
+
+.post-content ul,
+.post-content ol {
+  margin: 0 0 22px;
+  padding-left: 26px;
+}
+
+.post-content li {
+  margin: 8px 0;
+  line-height: 1.85;
+}
+
+.post-content li::marker { color: var(--accent); }
+
+.post-content blockquote {
+  margin: 28px 0;
+  padding: 18px 22px;
+  font-size: 16.5px;
+  line-height: 1.85;
+  color: var(--reading-text);
+}
+
+/* 表格与代码：保证密度与可读性 */
+
+.post-content table {
+  margin: 28px 0;
+  font-size: 14.5px;
+}
+
+.post-content th,
+.post-content td {
+  padding: 11px 16px;
+  line-height: 1.65;
+}
+
+.post-content th {
+  font-size: 13.5px;
+  letter-spacing: 0.02em;
+}
+
+.post-content :not(pre) > code {
+  font-size: 0.86em;
+  padding: 2px 6px;
+}
+
+.post-content pre {
+  margin-bottom: 24px;
+  font-size: 13.5px;
+  line-height: 1.72;
+}
+
+.post-content pre code { font-size: 13.5px; }
+
+.post-content img {
+  display: block;
+  margin: 28px auto;
+}
+
+.post-content hr { margin: 46px 0; }
+
+/* 目录：稍微放大字号与行距，便于扫读 */
+
+.toc { padding: 18px 16px; }
+
+.toc-link {
+  padding: 7px 10px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-soft);
+}
+
+.toc-link.level-3 {
+  font-size: 12.8px;
+  color: var(--text-soft);
+  opacity: 0.82;
+}
+
+@media (max-width: 720px) {
+  .post-main { padding: 26px 20px 34px; }
+
+  .post-content {
+    font-size: 16.5px;
+    line-height: 1.88;
+  }
+
+  .post-content p {
+    line-height: 1.88;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  .post-content h2 {
+    padding: 7px 12px;
+    font-size: 21px;
+  }
+}
