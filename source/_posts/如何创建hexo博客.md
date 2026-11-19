@@ -1,10 +1,10 @@
 ---
 title: 如何创建hexo博客
 date: 2026-11-18 23:28:41
-categories: 学习笔记
+categories: 基础笔记
 tags: [Hexo, 博客]
 ---
-已按要求只调整结构、层级与排版，内容未增删（重复的步骤已合并到对应方法下）。
+
 
 ---
 
@@ -247,7 +247,3 @@ npx hexo clean
 npx hexo generate
 npx hexo deploy
 ```
-
-## 六、判断规则
-
-判断规则再强调一次：仓库名是 `<用户名>.github.io` 就用 `root: /`；其他名字一律 `root: /仓库名/`。
