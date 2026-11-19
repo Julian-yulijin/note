@@ -3200,3 +3200,203 @@ html[data-theme="light"] .footer-wordmark {
 .post-hero .kicker::before {
   background: linear-gradient(90deg, var(--accent), var(--c-sky), transparent);
 }
+
+/* ==========================================================================
+   1.2.5.0 色彩氛围 — 把点缀色扩展到背景光层、卡片与标题带
+   ========================================================================== */
+
+html[data-theme="light"] {
+  --c-sky-soft: rgba(2, 132, 199, 0.12);
+  --c-violet-soft: rgba(124, 58, 237, 0.12);
+  --c-amber-soft: rgba(180, 83, 9, 0.1);
+  --c-rose-soft: rgba(190, 18, 60, 0.1);
+}
+
+body {
+  background:
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 48%, var(--bg) 100%);
+}
+
+/* 全页光层：四周分布冷暖光，不再只集中在 Hero */
+
+.page-glow {
+  background:
+    radial-gradient(760px 520px at 8% -6%, rgba(45, 212, 191, 0.2), transparent 66%),
+    radial-gradient(820px 560px at 92% -4%, rgba(129, 140, 248, 0.22), transparent 68%),
+    radial-gradient(720px 520px at 52% 108%, rgba(251, 191, 36, 0.07), transparent 70%),
+    radial-gradient(620px 460px at 84% 86%, rgba(56, 189, 248, 0.09), transparent 70%);
+}
+
+html[data-theme="light"] .page-glow {
+  background:
+    radial-gradient(760px 520px at 8% -6%, rgba(13, 148, 136, 0.12), transparent 66%),
+    radial-gradient(820px 560px at 92% -4%, rgba(99, 102, 241, 0.12), transparent 68%),
+    radial-gradient(720px 520px at 52% 108%, rgba(180, 83, 9, 0.05), transparent 70%),
+    radial-gradient(620px 460px at 84% 86%, rgba(2, 132, 199, 0.07), transparent 70%);
+}
+
+/* Hero：极光加深，标题更早进入彩色 */
+
+.hero::after {
+  opacity: 1;
+  background:
+    radial-gradient(460px 340px at 22% 44%, rgba(45, 212, 191, 0.28), transparent 68%),
+    radial-gradient(480px 360px at 76% 26%, rgba(129, 140, 248, 0.3), transparent 70%),
+    radial-gradient(360px 260px at 54% 86%, rgba(251, 191, 36, 0.12), transparent 72%);
+}
+
+html[data-theme="light"] .hero::after { opacity: 0.55; }
+
+.hero-title {
+  background-image: linear-gradient(112deg, var(--text) 0%, var(--accent) 34%, var(--c-sky) 66%, var(--accent-2) 98%);
+}
+
+/* 终端面板：渐变描边 */
+
+.hero-console {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(160deg, rgba(30, 41, 59, 0.74), rgba(7, 10, 15, 0.94)) padding-box,
+    linear-gradient(135deg, rgba(45, 212, 191, 0.55), rgba(56, 189, 248, 0.35), rgba(129, 140, 248, 0.55)) border-box;
+}
+
+html[data-theme="light"] .hero-console {
+  background:
+    linear-gradient(160deg, #ffffff, #eef3fa) padding-box,
+    linear-gradient(135deg, rgba(13, 148, 136, 0.45), rgba(2, 132, 199, 0.3), rgba(99, 102, 241, 0.45)) border-box;
+}
+
+/* 卡片底色：各自带一层对应色相的浅渐变 */
+
+.post-grid > .card {
+  background:
+    linear-gradient(155deg, var(--card-accent-soft), transparent 58%),
+    var(--surface);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background 0.25s ease;
+}
+
+.post-grid > .card:hover {
+  background:
+    linear-gradient(155deg, var(--card-accent-soft), transparent 66%),
+    var(--surface-solid);
+}
+
+/* 分类卡同样带底色 */
+
+.topic {
+  background:
+    linear-gradient(140deg, var(--topic-soft), transparent 64%),
+    var(--surface);
+}
+
+.topic:hover {
+  background:
+    linear-gradient(140deg, var(--topic-soft), transparent 72%),
+    var(--surface-solid);
+}
+
+/* 文章标题区：可见的青蓝到紫色色带 */
+
+.post-hero {
+  background:
+    linear-gradient(112deg, rgba(45, 212, 191, 0.1), rgba(56, 189, 248, 0.06) 38%, rgba(129, 140, 248, 0.1) 72%, transparent),
+    linear-gradient(180deg, var(--bg-soft), transparent);
+}
+
+html[data-theme="light"] .post-hero {
+  background:
+    linear-gradient(112deg, rgba(13, 148, 136, 0.09), rgba(2, 132, 199, 0.05) 38%, rgba(99, 102, 241, 0.09) 72%, transparent),
+    linear-gradient(180deg, var(--bg-soft), transparent);
+}
+
+/* 页脚：两端光晕 */
+
+.site-footer {
+  background:
+    radial-gradient(720px 320px at 12% 0%, rgba(45, 212, 191, 0.1), transparent 70%),
+    radial-gradient(720px 320px at 88% 0%, rgba(129, 140, 248, 0.12), transparent 70%),
+    var(--bg-soft);
+}
+
+html[data-theme="light"] .site-footer {
+  background:
+    radial-gradient(720px 320px at 12% 0%, rgba(13, 148, 136, 0.07), transparent 70%),
+    radial-gradient(720px 320px at 88% 0%, rgba(99, 102, 241, 0.08), transparent 70%),
+    var(--bg-soft);
+}
+
+/* 区块标题下的分隔线改用渐变 */
+
+.section-head::after {
+  background: linear-gradient(90deg, var(--accent-soft), var(--c-sky-soft) 42%, transparent 88%);
+}
+
+/* 标签总览页：标签本身带颜色 */
+
+.tag-chip:nth-child(4n+1) {
+  color: var(--accent);
+  border-color: rgba(45, 212, 191, 0.4);
+  background: var(--accent-soft);
+}
+
+.tag-chip:nth-child(4n+2) {
+  color: var(--c-sky);
+  border-color: rgba(56, 189, 248, 0.4);
+  background: var(--c-sky-soft);
+}
+
+.tag-chip:nth-child(4n+3) {
+  color: var(--c-violet);
+  border-color: rgba(129, 140, 248, 0.45);
+  background: var(--c-violet-soft);
+}
+
+.tag-chip:nth-child(4n+4) {
+  color: var(--c-amber);
+  border-color: rgba(251, 191, 36, 0.4);
+  background: var(--c-amber-soft);
+}
+
+html[data-theme="light"] .tag-chip:nth-child(4n+1) { border-color: rgba(13, 148, 136, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(4n+2) { border-color: rgba(2, 132, 199, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(4n+3) { border-color: rgba(124, 58, 237, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(4n+4) { border-color: rgba(180, 83, 9, 0.35); }
+
+/* 正文内部：表格、引用、行内代码与标题分隔线带颜色 */
+
+.post-content h2 {
+  border-bottom: 0;
+  background-image: linear-gradient(90deg, var(--accent-soft), var(--c-sky-soft) 42%, transparent 88%);
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100% 1px;
+}
+
+.post-content th {
+  background: linear-gradient(110deg, var(--accent-soft), var(--c-sky-soft));
+  color: var(--text);
+}
+
+.post-content tr:nth-child(even) td {
+  background: rgba(148, 163, 184, 0.035);
+}
+
+.post-content blockquote {
+  border-left-color: var(--accent);
+  background: linear-gradient(100deg, var(--accent-soft), var(--c-violet-soft) 68%, transparent);
+}
+
+.post-content :not(pre) > code {
+  color: var(--c-sky);
+  background: var(--c-sky-soft);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+html[data-theme="light"] .post-content :not(pre) > code {
+  color: var(--c-sky);
+  border-color: rgba(2, 132, 199, 0.22);
+}
+
+.post-content a {
+  text-decoration-color: var(--c-sky);
+}
