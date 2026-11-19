@@ -1,6 +1,24 @@
 <%
   var plain = strip_html(page.content).replace(/\s+/g, '');
   var minutes = Math.max(1, Math.ceil(plain.length / 350));
+
+  var related = [];
+  var tagNames = [];
+  if (page.tags && page.tags.length) {
+    page.tags.each(function (tag) { tagNames.push(tag.name); });
+  }
+  if (tagNames.length) {
+    site.posts.each(function (p) {
+      if (related.length >= 3 || p.path === page.path) return;
+      var shared = 0;
+      if (p.tags && p.tags.length) {
+        p.tags.each(function (tag) {
+          if (tagNames.indexOf(tag.name) !== -1) shared++;
+        });
+      }
+      if (shared > 0) related.push(p);
+    });
+  }
 %>
 <article class="post">
   <header class="post-hero">
@@ -30,7 +48,38 @@
   </header>
 
   <div class="wrap post-body">
-    <div class="post-content" id="post-content"><%- page.content %></div>
+    <aside class="post-rail" aria-label="文章操作">
+      <button class="rail-btn" type="button" id="copy-link" aria-label="复制链接" title="复制链接">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+          <path d="M5 15V5a2 2 0 0 1 2-2h10"></path>
+        </svg>
+      </button>
+      <button class="rail-btn" type="button" id="share-post" aria-label="分享" title="分享">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <path d="m8.6 10.6 6.8-4.2M8.6 13.4l6.8 4.2"></path>
+        </svg>
+      </button>
+      <button class="rail-btn" type="button" id="back-top-rail" aria-label="回到顶部" title="回到顶部">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7"></path>
+        </svg>
+      </button>
+    </aside>
+
+    <div class="post-main">
+      <% if (!theme.toc || theme.toc.enable !== false) { %>
+      <details class="toc-drawer">
+        <summary>目录</summary>
+        <nav class="toc-nav toc-nav-mobile" id="toc-nav-mobile" aria-label="文章目录"></nav>
+      </details>
+      <% } %>
+      <div class="post-content" id="post-content"><%- page.content %></div>
+    </div>
+
     <% if (!theme.toc || theme.toc.enable !== false) { %>
     <aside class="toc" id="toc" aria-label="文章目录">
       <p class="toc-title">目录</p>
@@ -58,5 +107,19 @@
       </nav>
     </footer>
   </div>
+  <% } %>
+
+  <% if (related.length) { %>
+  <section class="wrap related">
+    <div class="section-head">
+      <h2 class="section-title">相关文章</h2>
+      <span class="section-sub"><%= related.length %> 篇</span>
+    </div>
+    <div class="post-grid">
+      <% related.forEach(function (post) { %>
+        <%- partial('_partial/post-card', { post: post }) %>
+      <% }) %>
+    </div>
+  </section>
   <% } %>
 </article>

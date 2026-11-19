@@ -58,6 +58,7 @@
   var input = document.getElementById('search-input');
   var resultsBox = document.getElementById('search-results');
   var closeBtn = document.getElementById('search-close');
+  var palette = document.getElementById('palette-actions');
   var searchData = null;
   var searchLoading = false;
   var activeIndex = -1;
@@ -155,9 +156,10 @@
     if (!resultsBox) return;
     resultsBox.innerHTML = '';
     if (!list.length) {
+      if (!input || !input.value.trim()) return;
       var empty = document.createElement('div');
       empty.className = 'search-empty';
-      empty.textContent = input && input.value.trim() ? '没有找到匹配的内容' : '输入关键词开始搜索';
+      empty.textContent = '没有找到匹配的内容';
       resultsBox.appendChild(empty);
       return;
     }
@@ -181,9 +183,11 @@
     if (!q) {
       currentResults = [];
       activeIndex = -1;
+      if (palette) palette.classList.remove('is-hidden');
       renderResults([]);
       return;
     }
+    if (palette) palette.classList.add('is-hidden');
     var tokens = q.split(/\s+/).filter(Boolean);
     var scored = [];
     (searchData || []).forEach(function (item) {
@@ -271,9 +275,14 @@
     var toc = document.getElementById('toc');
     if (!content || !nav || !toc) return;
 
+    var mobileNav = document.getElementById('toc-nav-mobile');
+    var navs = [nav];
+    if (mobileNav) navs.push(mobileNav);
+
     var headings = Array.prototype.slice.call(content.querySelectorAll('h2, h3'));
     if (!headings.length) {
       toc.style.display = 'none';
+      if (mobileNav) mobileNav.closest('details').style.display = 'none';
       var bodyEl = toc.closest('.post-body');
       if (bodyEl) bodyEl.classList.add('no-toc');
       return;
@@ -295,14 +304,23 @@
       }
       usedIds[heading.id] = true;
 
-      var link = document.createElement('a');
-      link.className = 'toc-link level-' + heading.tagName.slice(1);
-      link.href = '#' + heading.id;
-      link.textContent = heading.textContent;
-      nav.appendChild(link);
+      navs.forEach(function (target) {
+        var link = document.createElement('a');
+        link.className = 'toc-link level-' + heading.tagName.slice(1);
+        link.href = '#' + heading.id;
+        link.textContent = heading.textContent;
+        target.appendChild(link);
+      });
     });
 
-    var links = Array.prototype.slice.call(nav.querySelectorAll('.toc-link'));
+    if (mobileNav) {
+      var drawer = mobileNav.closest('details');
+      mobileNav.addEventListener('click', function (event) {
+        if (event.target.closest('a') && drawer) drawer.removeAttribute('open');
+      });
+    }
+
+    var links = Array.prototype.slice.call(document.querySelectorAll('#toc-nav .toc-link, #toc-nav-mobile .toc-link'));
     var ticking = false;
 
     function updateActive() {
@@ -332,6 +350,7 @@
   function initScrollUi() {
     var progressBar = document.getElementById('read-progress');
     var backTop = document.getElementById('back-top');
+    var ring = document.querySelector('.progress-ring circle');
     var content = document.getElementById('post-content');
     if (!progressBar && !backTop) return;
 
@@ -339,11 +358,19 @@
 
     function update() {
       var y = window.scrollY || window.pageYOffset;
-      if (progressBar && content) {
+      var ratio = 0;
+      if (content) {
         var start = content.getBoundingClientRect().top + y - 120;
         var span = Math.max(1, content.offsetHeight - window.innerHeight + 240);
-        var ratio = Math.min(1, Math.max(0, (y - start) / span));
-        progressBar.style.width = (ratio * 100).toFixed(2) + '%';
+        ratio = Math.min(1, Math.max(0, (y - start) / span));
+      } else {
+        var max = document.documentElement.scrollHeight - window.innerHeight;
+        ratio = max > 0 ? Math.min(1, Math.max(0, y / max)) : 0;
+      }
+      if (progressBar) progressBar.style.width = (ratio * 100).toFixed(2) + '%';
+      if (ring) {
+        var total = 2 * Math.PI * 20;
+        ring.style.strokeDashoffset = (total * (1 - ratio)).toFixed(1);
       }
       if (backTop) backTop.classList.toggle('show', y > 600);
       ticking = false;
@@ -550,6 +577,108 @@
     });
   }
 
+  /* ---------------- 命令面板 / 卡片光斑 / 文章操作 ---------------- */
+
+  function initPalette() {
+    var themeBtn = document.getElementById('palette-theme');
+    if (!themeBtn) return;
+    themeBtn.addEventListener('click', function () {
+      var toggle = document.getElementById('theme-toggle');
+      if (toggle) toggle.click();
+    });
+  }
+
+  function initCardSpotlight() {
+    if (window.matchMedia && window.matchMedia('(hover: none)').matches) return;
+    document.addEventListener('pointermove', function (event) {
+      var target = event.target;
+      var card = target && target.closest ? target.closest('.card') : null;
+      if (!card) return;
+      var rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (event.clientX - rect.left).toFixed(1) + 'px');
+      card.style.setProperty('--my', (event.clientY - rect.top).toFixed(1) + 'px');
+    }, { passive: true });
+  }
+
+  function copyUrl() {
+    var url = location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(url);
+    }
+    return new Promise(function (resolve) {
+      var area = document.createElement('textarea');
+      area.value = url;
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(area);
+      resolve();
+    });
+  }
+
+  function initPostRail() {
+    var copyBtn = document.getElementById('copy-link');
+    var shareBtn = document.getElementById('share-post');
+    var topBtn = document.getElementById('back-top-rail');
+    if (!copyBtn && !shareBtn && !topBtn) return;
+
+    function flash(button) {
+      button.classList.add('is-done');
+      setTimeout(function () { button.classList.remove('is-done'); }, 1400);
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        copyUrl().then(function () { flash(copyBtn); });
+      });
+    }
+
+    if (shareBtn) {
+      shareBtn.addEventListener('click', function () {
+        if (navigator.share) {
+          navigator.share({ title: document.title, url: location.href }).catch(function () {});
+        } else {
+          copyUrl().then(function () { flash(shareBtn); });
+        }
+      });
+    }
+
+    if (topBtn) {
+      topBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  }
+
+  function initStatsCount() {
+    var stats = document.querySelectorAll('.stat strong');
+    if (!stats.length || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        observer.unobserve(el);
+        var target = parseInt(el.textContent, 10);
+        if (!target || target < 2) return;
+        var start = 0;
+        function tick(now) {
+          if (!start) start = now;
+          var progress = Math.min(1, (now - start) / 700);
+          el.textContent = Math.round(target * (1 - Math.pow(1 - progress, 3)));
+          if (progress < 1) window.requestAnimationFrame(tick);
+        }
+        el.textContent = '0';
+        window.requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.4 });
+
+    Array.prototype.forEach.call(stats, function (el) { observer.observe(el); });
+  }
+
   buildToc();
   initScrollUi();
   enhanceCodeBlocks();
@@ -558,4 +687,8 @@
   markExternalLinks();
   initHeaderState();
   initReveal();
+  initPalette();
+  initCardSpotlight();
+  initPostRail();
+  initStatsCount();
 })();
