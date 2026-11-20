@@ -1,7 +1,7 @@
 ---
 title: 如何创建hexo博客
 date: 2026-11-18 23:28:41
-categories: 基础笔记
+categories: 网站建设与开发
 tags: [Hexo, 博客]
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Agent中的MCP
 date: 2026-11-19 16:01:13
-categories: 一般笔记
+categories: 人工智能与Agent
 tags: [Agent, 工具]
 
 ---

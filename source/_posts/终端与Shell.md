@@ -1,7 +1,7 @@
 ---
 title: 终端与Shell
 date: 2026-11-20 00:02:16
-categories: 基础笔记
+categories: 编程与开发基础
 tags: [终端, Shell]
 ---
 终端负责接在这里接受用户输入的指令并显示最终的结果
