@@ -1,0 +1,20 @@
+<%
+  var nodeId = String(node._id);
+  var kids = childrenMap[nodeId] || [];
+%>
+<li class="cat-branch">
+  <div class="cat-branch-row">
+    <a class="cat-branch-link" href="<%- url_for(node.path) %>">
+      <span class="cat-branch-mark" aria-hidden="true"></span>
+      <span class="cat-branch-name"><%= node.name %></span>
+    </a>
+    <span class="cat-branch-count"><%= node.length %> 篇</span>
+  </div>
+  <% if (kids.length) { %>
+  <ul class="cat-branch-children">
+    <% kids.forEach(function (child) { %>
+    <%- partial('_partial/category-branch', { node: child, childrenMap: childrenMap }) %>
+    <% }) %>
+  </ul>
+  <% } %>
+</li>

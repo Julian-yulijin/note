@@ -2,6 +2,48 @@
   var plain = strip_html(page.content).replace(/\s+/g, '');
   var minutes = Math.max(1, Math.ceil(plain.length / 350));
 
+  // ---- 分类体系：支持任意层级 ----
+  var allCategories = [];
+  site.categories.each(function (c) { allCategories.push(c); });
+
+  var catById = {};
+  allCategories.forEach(function (c) { catById[String(c._id)] = c; });
+
+  function categoryChain(c) {
+    var chain = [];
+    var cur = c;
+    var guard = 0;
+    while (cur && guard++ < 30) {
+      chain.unshift(cur);
+      cur = cur.parent ? catById[String(cur.parent)] : null;
+    }
+    return chain;
+  }
+
+  var catChildren = {};
+  allCategories.forEach(function (c) {
+    if (!c.parent) return;
+    var key = String(c.parent);
+    if (!catChildren[key]) catChildren[key] = [];
+    catChildren[key].push(c);
+  });
+
+  var catRoots = allCategories.filter(function (c) { return !c.parent; });
+
+  var currentCat = null;
+  if (page.categories && page.categories.length) {
+    page.categories.each(function (c) {
+      if (!currentCat || categoryChain(c).length > categoryChain(currentCat).length) {
+        currentCat = c;
+      }
+    });
+  }
+
+  var catPath = currentCat ? categoryChain(currentCat) : [];
+  var activeCatIds = {};
+  catPath.forEach(function (c) { activeCatIds[String(c._id)] = true; });
+  var currentCatId = currentCat ? String(currentCat._id) : '';
+
   var related = [];
   var tagNames = [];
   if (page.tags && page.tags.length) {
@@ -29,9 +71,9 @@
         <time datetime="<%= page.date.toISOString() %>"><%= date(page.date, 'YYYY-MM-DD') %></time>
         <span class="dot">·</span>
         <span><%= minutes %> 分钟阅读</span>
-        <% if (page.categories && page.categories.length) { %>
+        <% if (catPath.length) { %>
         <span class="dot">·</span>
-        <% page.categories.each(function (category, i) { %>
+        <% catPath.forEach(function (category, i) { %>
           <% if (i) { %><span class="slash">/</span><% } %>
           <a href="<%- url_for(category.path) %>"><%= category.name %></a>
         <% }) %>
@@ -48,26 +90,47 @@
   </header>
 
   <div class="wrap post-body">
-    <aside class="post-rail" aria-label="文章操作">
-      <button class="rail-btn" type="button" id="copy-link" aria-label="复制链接" title="复制链接">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="9" y="9" width="11" height="11" rx="2"></rect>
-          <path d="M5 15V5a2 2 0 0 1 2-2h10"></path>
-        </svg>
-      </button>
-      <button class="rail-btn" type="button" id="share-post" aria-label="分享" title="分享">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="18" cy="5" r="3"></circle>
-          <circle cx="6" cy="12" r="3"></circle>
-          <circle cx="18" cy="19" r="3"></circle>
-          <path d="m8.6 10.6 6.8-4.2M8.6 13.4l6.8 4.2"></path>
-        </svg>
-      </button>
-      <button class="rail-btn" type="button" id="back-top-rail" aria-label="回到顶部" title="回到顶部">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 19V5M5 12l7-7 7 7"></path>
-        </svg>
-      </button>
+    <aside class="post-rail" aria-label="文章体系与操作">
+      <div class="rail-actions">
+        <button class="rail-btn" type="button" id="copy-link" aria-label="复制链接" title="复制链接">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+            <path d="M5 15V5a2 2 0 0 1 2-2h10"></path>
+          </svg>
+        </button>
+        <button class="rail-btn" type="button" id="share-post" aria-label="分享" title="分享">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <path d="m8.6 10.6 6.8-4.2M8.6 13.4l6.8 4.2"></path>
+          </svg>
+        </button>
+        <button class="rail-btn" type="button" id="back-top-rail" aria-label="回到顶部" title="回到顶部">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 19V5M5 12l7-7 7 7"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="post-map">
+        <p class="post-map-title">// 体系位置</p>
+        <% if (catPath.length) { %>
+        <p class="post-map-path">
+          <% catPath.forEach(function (c, i) { %>
+            <% if (i) { %><span class="map-sep">/</span><% } %><span><%= c.name %></span>
+          <% }) %>
+        </p>
+        <ul class="map-tree">
+          <% catRoots.forEach(function (root) { %>
+            <%- partial('_partial/post-map-node', { node: root, childrenMap: catChildren, activeIds: activeCatIds, currentId: currentCatId, depth: 0 }) %>
+          <% }) %>
+        </ul>
+        <% } else { %>
+        <p class="post-map-empty">本篇尚未归入分类。在 front-matter 中用 <code>categories: [一级, 二级]</code> 即可建立多层体系。</p>
+        <% } %>
+        <a class="post-map-all" href="<%- url_for('/categories/') %>">查看全部分类 →</a>
+      </div>
     </aside>
 
     <div class="post-main">

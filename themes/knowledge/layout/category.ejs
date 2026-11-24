@@ -1,7 +1,63 @@
+<%
+  var allCats = [];
+  site.categories.each(function (c) { allCats.push(c); });
+  var byId = {};
+  allCats.forEach(function (c) { byId[String(c._id)] = c; });
+
+  function chainOf(c) {
+    var arr = [];
+    var cur = c;
+    var guard = 0;
+    while (cur && guard++ < 30) {
+      arr.unshift(cur);
+      cur = cur.parent ? byId[String(cur.parent)] : null;
+    }
+    return arr;
+  }
+
+  function normalizePath(p) {
+    return String(p || '').replace(/index\.html$/, '').replace(/\/+$/, '');
+  }
+
+  var current = null;
+  var pagePath = normalizePath(page.path);
+  allCats.forEach(function (c) {
+    if (normalizePath(c.path) === pagePath) current = c;
+  });
+  if (!current) {
+    allCats.forEach(function (c) {
+      if (!current && c.name === page.category) current = c;
+    });
+  }
+
+  var crumbs = current ? chainOf(current) : [];
+  var childCats = current ? allCats.filter(function (c) {
+    return c.parent && String(c.parent) === String(current._id);
+  }) : [];
+%>
 <div class="wrap page-head">
   <p class="kicker">// CATEGORY</p>
+  <nav class="cat-crumbs" aria-label="分类路径">
+    <a href="<%- url_for('/categories/') %>">分类</a>
+    <% crumbs.forEach(function (c, i) { %>
+    <span class="crumb-sep">/</span>
+    <% if (i === crumbs.length - 1) { %>
+    <span class="crumb-current"><%= c.name %></span>
+    <% } else { %>
+    <a href="<%- url_for(c.path) %>"><%= c.name %></a>
+    <% } %>
+    <% }) %>
+  </nav>
   <h1><%= page.category %></h1>
   <p class="page-desc">该分类下共 <%= page.posts.length %> 篇文章。</p>
+  <% if (childCats.length) { %>
+  <div class="cat-children">
+    <span class="cat-children-label">子分类</span>
+    <% childCats.forEach(function (c) { %>
+    <a class="chip" href="<%- url_for(c.path) %>"><%= c.name %> · <%= c.length %></a>
+    <% }) %>
+  </div>
+  <% } %>
 </div>
 
 <section class="wrap section">
