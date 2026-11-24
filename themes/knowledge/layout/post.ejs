@@ -44,6 +44,36 @@
   catPath.forEach(function (c) { activeCatIds[String(c._id)] = true; });
   var currentCatId = currentCat ? String(currentCat._id) : '';
 
+  // 地图布局：先序遍历，按深度缩进，同一条根分支共用色相
+  function flattenTree(nodes, depth, hue, out) {
+    nodes.forEach(function (n) {
+      var kids = catChildren[String(n._id)] || [];
+      out.push({ node: n, depth: depth, hue: hue, kids: kids });
+      if (kids.length) flattenTree(kids, depth + 1, hue, out);
+    });
+    return out;
+  }
+
+  var mapRowH = 26;
+  var mapPadY = 10;
+  var mapRows = [{
+    node: { name: '知识库', path: '/categories/', _id: '__map_root' },
+    depth: 0,
+    hue: 0,
+    kids: catRoots
+  }];
+  catRoots.forEach(function (root, idx) {
+    flattenTree([root], 1, idx % 4, mapRows);
+  });
+  var mapHeight = mapRows.length * mapRowH + mapPadY * 2;
+  activeCatIds['__map_root'] = catPath.length > 0;
+  var mapIndex = {};
+  mapRows.forEach(function (row, i) {
+    row.y = mapPadY + i * mapRowH + mapRowH / 2;
+    row.x = 12 + row.depth * 17;
+    mapIndex[String(row.node._id)] = row;
+  });
+
   var related = [];
   var tagNames = [];
   if (page.tags && page.tags.length) {
@@ -114,18 +144,42 @@
       </div>
 
       <div class="post-map">
-        <p class="post-map-title">// 体系位置</p>
+        <p class="post-map-title">// 体系地图</p>
         <% if (catPath.length) { %>
         <p class="post-map-path">
           <% catPath.forEach(function (c, i) { %>
             <% if (i) { %><span class="map-sep">/</span><% } %><span><%= c.name %></span>
           <% }) %>
         </p>
-        <ul class="map-tree">
-          <% catRoots.forEach(function (root) { %>
-            <%- partial('_partial/post-map-node', { node: root, childrenMap: catChildren, activeIds: activeCatIds, currentId: currentCatId, depth: 0 }) %>
-          <% }) %>
-        </ul>
+        <svg class="map-svg" viewBox="0 0 192 <%= mapHeight %>" width="100%" height="<%= mapHeight %>" role="img" aria-label="文章分类体系地图">
+          <g class="map-edges">
+            <% mapRows.forEach(function (row) { %>
+              <% row.kids.forEach(function (kid) { %>
+                <% var child = mapIndex[String(kid._id)]; %>
+                <% var onPath = activeCatIds[String(row.node._id)] && activeCatIds[String(kid._id)]; %>
+                <path class="map-edge map-hue-<%= child.hue %><%= onPath ? ' is-path' : '' %>" d="M <%= row.x %> <%= row.y %> V <%= child.y - 8 %> Q <%= row.x %> <%= child.y %> <%= row.x + 8 %> <%= child.y %> H <%= child.x %>" fill="none"></path>
+              <% }) %>
+            <% }) %>
+          </g>
+          <g class="map-pins">
+            <% mapRows.forEach(function (row) { %>
+              <% var id = String(row.node._id); %>
+              <% var isActive = !!activeCatIds[id]; %>
+              <% var isCurrent = currentCatId === id; %>
+              <a class="map-node-link map-hue-<%= row.hue %><%= isCurrent ? ' is-current' : '' %>" href="<%- url_for(row.node.path) %>">
+                <% if (isCurrent) { %><circle class="map-halo" cx="<%= row.x %>" cy="<%= row.y %>" r="11"></circle><% } %>
+                <circle class="map-pin<%= isCurrent ? ' is-current' : (isActive ? ' is-active' : '') %>" cx="<%= row.x %>" cy="<%= row.y %>" r="<%= isCurrent ? 5.2 : (isActive ? 3.8 : 3.4) %>"></circle>
+                <text class="map-label<%= isCurrent ? ' is-current' : (isActive ? ' is-active' : '') %>" x="<%= row.x + 10 %>" y="<%= row.y + 3.6 %>"><%= row.node.name %></text>
+                <% if (isCurrent) { %><text class="map-you" x="186" y="<%= row.y + 3.4 %>" text-anchor="end">本篇</text><% } %>
+              </a>
+            <% }) %>
+          </g>
+        </svg>
+        <div class="map-legend">
+          <span class="is-current"><i></i>本篇</span>
+          <span class="is-path"><i></i>所属路径</span>
+          <span><i></i>其他分支</span>
+        </div>
         <% } else { %>
         <p class="post-map-empty">本篇尚未归入分类。在 front-matter 中用 <code>categories: [一级, 二级]</code> 即可建立多层体系。</p>
         <% } %>
