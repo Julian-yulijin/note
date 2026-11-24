@@ -4030,3 +4030,393 @@ html[data-theme="light"] .post-content > table tbody tr:nth-child(even) {
 
   .post-content h2::before { left: -16px; }
 }
+
+/* ==========================================================================
+   1.2.13.0 配色扩展 — 增加蓝 / 品红 / 橙，9 色体系只落在小面积与光层
+   ========================================================================== */
+
+html[data-theme="dark"] {
+  --c-blue: #60a5fa;
+  --c-blue-soft: rgba(96, 165, 250, 0.11);
+  --c-fuchsia: #e879f9;
+  --c-fuchsia-soft: rgba(232, 121, 249, 0.1);
+  --c-orange: #fb923c;
+  --c-orange-soft: rgba(251, 146, 60, 0.09);
+}
+
+html[data-theme="light"] {
+  --c-blue: #2563eb;
+  --c-blue-soft: rgba(37, 99, 235, 0.09);
+  --c-fuchsia: #a21caf;
+  --c-fuchsia-soft: rgba(162, 28, 175, 0.08);
+  --c-orange: #c2410c;
+  --c-orange-soft: rgba(194, 65, 12, 0.08);
+}
+
+/* 全页光层：五个方向、五种色相，透明度仍压在 0.24 以下 */
+
+.page-glow {
+  background:
+    radial-gradient(760px 520px at 6% -8%, rgba(45, 212, 191, 0.2), transparent 66%),
+    radial-gradient(680px 460px at 42% -12%, rgba(96, 165, 250, 0.13), transparent 70%),
+    radial-gradient(820px 560px at 94% -4%, rgba(129, 140, 248, 0.22), transparent 68%),
+    radial-gradient(700px 500px at 0% 104%, rgba(232, 121, 249, 0.09), transparent 70%),
+    radial-gradient(760px 540px at 96% 92%, rgba(251, 146, 60, 0.1), transparent 70%);
+}
+
+html[data-theme="light"] .page-glow {
+  background:
+    radial-gradient(760px 520px at 6% -8%, rgba(13, 148, 136, 0.11), transparent 66%),
+    radial-gradient(680px 460px at 42% -12%, rgba(37, 99, 235, 0.08), transparent 70%),
+    radial-gradient(820px 560px at 94% -4%, rgba(99, 102, 241, 0.11), transparent 68%),
+    radial-gradient(700px 500px at 0% 104%, rgba(162, 28, 175, 0.06), transparent 70%),
+    radial-gradient(760px 540px at 96% 92%, rgba(194, 65, 12, 0.06), transparent 70%);
+}
+
+/* Hero 极光：补蓝与品红两层过渡 */
+
+.hero::after {
+  background:
+    radial-gradient(460px 340px at 20% 44%, rgba(45, 212, 191, 0.26), transparent 68%),
+    radial-gradient(440px 320px at 50% 10%, rgba(96, 165, 250, 0.16), transparent 72%),
+    radial-gradient(480px 360px at 78% 26%, rgba(129, 140, 248, 0.28), transparent 70%),
+    radial-gradient(360px 280px at 12% 92%, rgba(232, 121, 249, 0.12), transparent 72%),
+    radial-gradient(380px 280px at 58% 94%, rgba(251, 146, 60, 0.09), transparent 72%);
+}
+
+/* Hero 标题：结尾多一档紫，过渡更细 */
+
+.hero-title {
+  background-image: linear-gradient(112deg, var(--text) 0%, var(--accent) 30%, var(--c-sky) 56%, var(--accent-2) 82%, var(--c-violet) 100%);
+}
+
+/* 终端描边：青 → 蓝 → 紫 → 品红 → 珊瑚 */
+
+.hero-console {
+  background:
+    linear-gradient(160deg, rgba(30, 41, 59, 0.74), rgba(7, 10, 15, 0.94)) padding-box,
+    linear-gradient(135deg, rgba(45, 212, 191, 0.6), rgba(96, 165, 250, 0.4) 28%, rgba(129, 140, 248, 0.55) 56%, rgba(232, 121, 249, 0.42) 78%, rgba(251, 113, 133, 0.55)) border-box;
+}
+
+html[data-theme="light"] .hero-console {
+  background:
+    linear-gradient(160deg, #ffffff, #eef3fa) padding-box,
+    linear-gradient(135deg, rgba(13, 148, 136, 0.5), rgba(37, 99, 235, 0.34) 28%, rgba(99, 102, 241, 0.45) 56%, rgba(162, 28, 175, 0.3) 78%, rgba(225, 29, 72, 0.4)) border-box;
+}
+
+/* 统计数字：冷 / 暖 / 冷紫，三列色相分开 */
+
+.hero-stats .stat:nth-child(1) strong {
+  background-image: linear-gradient(120deg, var(--accent), var(--c-sky));
+}
+
+.hero-stats .stat:nth-child(2) strong {
+  background-image: linear-gradient(120deg, var(--c-amber), var(--c-orange));
+}
+
+.hero-stats .stat:nth-child(3) strong {
+  background-image: linear-gradient(120deg, var(--c-blue), var(--c-violet));
+}
+
+/* 文章卡片：暖冷交替的 7 色循环，避免相邻同色系 */
+
+.post-grid > .card:nth-child(7n+1) {
+  --card-accent: var(--accent);
+  --card-accent-soft: var(--accent-soft);
+}
+
+.post-grid > .card:nth-child(7n+2) {
+  --card-accent: var(--c-amber);
+  --card-accent-soft: var(--c-amber-soft);
+}
+
+.post-grid > .card:nth-child(7n+3) {
+  --card-accent: var(--c-sky);
+  --card-accent-soft: var(--c-sky-soft);
+}
+
+.post-grid > .card:nth-child(7n+4) {
+  --card-accent: var(--c-rose);
+  --card-accent-soft: var(--c-rose-soft);
+}
+
+.post-grid > .card:nth-child(7n+5) {
+  --card-accent: var(--c-violet);
+  --card-accent-soft: var(--c-violet-soft);
+}
+
+.post-grid > .card:nth-child(7n+6) {
+  --card-accent: var(--c-orange);
+  --card-accent-soft: var(--c-orange-soft);
+}
+
+.post-grid > .card:nth-child(7n+7) {
+  --card-accent: var(--c-blue);
+  --card-accent-soft: var(--c-blue-soft);
+}
+
+/* 分类卡同一套 7 色顺序 */
+
+.topic:nth-child(7n+1) {
+  --topic-accent: var(--accent);
+  --topic-soft: var(--accent-soft);
+}
+
+.topic:nth-child(7n+2) {
+  --topic-accent: var(--c-amber);
+  --topic-soft: var(--c-amber-soft);
+}
+
+.topic:nth-child(7n+3) {
+  --topic-accent: var(--c-sky);
+  --topic-soft: var(--c-sky-soft);
+}
+
+.topic:nth-child(7n+4) {
+  --topic-accent: var(--c-rose);
+  --topic-soft: var(--c-rose-soft);
+}
+
+.topic:nth-child(7n+5) {
+  --topic-accent: var(--c-violet);
+  --topic-soft: var(--c-violet-soft);
+}
+
+.topic:nth-child(7n+6) {
+  --topic-accent: var(--c-orange);
+  --topic-soft: var(--c-orange-soft);
+}
+
+.topic:nth-child(7n+7) {
+  --topic-accent: var(--c-blue);
+  --topic-soft: var(--c-blue-soft);
+}
+
+/* 标签同步 7 色循环 */
+
+.chip:nth-child(7n+1) {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.chip:nth-child(7n+2) {
+  color: var(--c-amber);
+  background: var(--c-amber-soft);
+}
+
+.chip:nth-child(7n+3) {
+  color: var(--c-sky);
+  background: var(--c-sky-soft);
+}
+
+.chip:nth-child(7n+4) {
+  color: var(--c-rose);
+  background: var(--c-rose-soft);
+}
+
+.chip:nth-child(7n+5) {
+  color: var(--c-violet);
+  background: var(--c-violet-soft);
+}
+
+.chip:nth-child(7n+6) {
+  color: var(--c-orange);
+  background: var(--c-orange-soft);
+}
+
+.chip:nth-child(7n+7) {
+  color: var(--c-blue);
+  background: var(--c-blue-soft);
+}
+
+/* 标签总览页：描边与文字同色相 */
+
+.tag-chip:nth-child(7n+1) {
+  color: var(--accent);
+  border-color: rgba(45, 212, 191, 0.4);
+  background: var(--accent-soft);
+}
+
+.tag-chip:nth-child(7n+2) {
+  color: var(--c-amber);
+  border-color: rgba(251, 191, 36, 0.4);
+  background: var(--c-amber-soft);
+}
+
+.tag-chip:nth-child(7n+3) {
+  color: var(--c-sky);
+  border-color: rgba(56, 189, 248, 0.4);
+  background: var(--c-sky-soft);
+}
+
+.tag-chip:nth-child(7n+4) {
+  color: var(--c-rose);
+  border-color: rgba(251, 113, 133, 0.45);
+  background: var(--c-rose-soft);
+}
+
+.tag-chip:nth-child(7n+5) {
+  color: var(--c-violet);
+  border-color: rgba(129, 140, 248, 0.45);
+  background: var(--c-violet-soft);
+}
+
+.tag-chip:nth-child(7n+6) {
+  color: var(--c-orange);
+  border-color: rgba(251, 146, 60, 0.42);
+  background: var(--c-orange-soft);
+}
+
+.tag-chip:nth-child(7n+7) {
+  color: var(--c-blue);
+  border-color: rgba(96, 165, 250, 0.45);
+  background: var(--c-blue-soft);
+}
+
+html[data-theme="light"] .tag-chip:nth-child(7n+1) { border-color: rgba(13, 148, 136, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(7n+2) { border-color: rgba(180, 83, 9, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(7n+3) { border-color: rgba(2, 132, 199, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(7n+4) { border-color: rgba(190, 18, 60, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(7n+5) { border-color: rgba(124, 58, 237, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(7n+6) { border-color: rgba(194, 65, 12, 0.35); }
+html[data-theme="light"] .tag-chip:nth-child(7n+7) { border-color: rgba(37, 99, 235, 0.35); }
+
+/* 分类 / 标签总览计数 */
+
+.taxonomy-card:nth-child(7n+1) .taxonomy-count { color: var(--accent); }
+.taxonomy-card:nth-child(7n+2) .taxonomy-count { color: var(--c-amber); }
+.taxonomy-card:nth-child(7n+3) .taxonomy-count { color: var(--c-sky); }
+.taxonomy-card:nth-child(7n+4) .taxonomy-count { color: var(--c-rose); }
+.taxonomy-card:nth-child(7n+5) .taxonomy-count { color: var(--c-violet); }
+.taxonomy-card:nth-child(7n+6) .taxonomy-count { color: var(--c-orange); }
+.taxonomy-card:nth-child(7n+7) .taxonomy-count { color: var(--c-blue); }
+
+/* 正文二级标题：四色轮换（青 / 蓝 / 紫 / 玫瑰） */
+
+.post-content h2:nth-of-type(4n+1) {
+  background: linear-gradient(90deg, var(--accent-soft), rgba(56, 189, 248, 0.05) 62%, transparent 96%);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.post-content h2:nth-of-type(4n+1)::before { background: var(--accent); }
+
+.post-content h2:nth-of-type(4n+2) {
+  background: linear-gradient(90deg, var(--c-blue-soft), rgba(129, 140, 248, 0.05) 62%, transparent 96%);
+  box-shadow: inset 3px 0 0 var(--c-blue);
+}
+
+.post-content h2:nth-of-type(4n+2)::before { background: var(--c-blue); }
+
+.post-content h2:nth-of-type(4n+3) {
+  background: linear-gradient(90deg, var(--c-violet-soft), rgba(232, 121, 249, 0.05) 62%, transparent 96%);
+  box-shadow: inset 3px 0 0 var(--c-violet);
+}
+
+.post-content h2:nth-of-type(4n+3)::before { background: var(--c-violet); }
+
+.post-content h2:nth-of-type(4n+4) {
+  background: linear-gradient(90deg, var(--c-rose-soft), rgba(251, 146, 60, 0.04) 62%, transparent 96%);
+  box-shadow: inset 3px 0 0 var(--c-rose);
+}
+
+.post-content h2:nth-of-type(4n+4)::before { background: var(--c-rose); }
+
+/* 三级标题小方块跟随四色 */
+
+.post-content h3::before { background: linear-gradient(135deg, var(--accent), var(--c-sky)); }
+
+.post-content h3:nth-of-type(4n+2)::before { background: linear-gradient(135deg, var(--c-blue), var(--accent-2)); }
+
+.post-content h3:nth-of-type(4n+3)::before { background: linear-gradient(135deg, var(--c-violet), var(--c-fuchsia)); }
+
+.post-content h3:nth-of-type(4n+4)::before { background: linear-gradient(135deg, var(--c-rose), var(--c-orange)); }
+
+/* 阅读面板：四角色光扩到四色，中心仍保持纯色 */
+
+.post-main {
+  background:
+    radial-gradient(660px 440px at 102% 0%, rgba(96, 165, 250, 0.07), transparent 72%),
+    radial-gradient(560px 380px at -4% 102%, rgba(232, 121, 249, 0.05), transparent 74%),
+    radial-gradient(520px 360px at 102% 96%, rgba(251, 146, 60, 0.045), transparent 74%),
+    linear-gradient(180deg, var(--reading-panel), var(--reading-panel-2));
+}
+
+html[data-theme="light"] .post-main {
+  background:
+    radial-gradient(660px 440px at 102% 0%, rgba(37, 99, 235, 0.05), transparent 72%),
+    radial-gradient(560px 380px at -4% 102%, rgba(162, 28, 175, 0.035), transparent 74%),
+    radial-gradient(520px 360px at 102% 96%, rgba(194, 65, 12, 0.03), transparent 74%),
+    linear-gradient(180deg, #ffffff, #f8fafc);
+}
+
+/* 面板顶部细线延长为五段色相 */
+
+.post-main::before {
+  background: linear-gradient(90deg, transparent, var(--accent) 14%, var(--c-sky) 34%, var(--c-blue) 50%, var(--c-fuchsia) 68%, var(--c-rose) 84%, transparent);
+}
+
+/* 文章标题带：冷 → 紫 → 暖的低透明度过渡 */
+
+.post-hero {
+  background:
+    linear-gradient(112deg, rgba(45, 212, 191, 0.11), rgba(56, 189, 248, 0.06) 26%, rgba(96, 165, 250, 0.07) 44%, rgba(129, 140, 248, 0.11) 62%, rgba(232, 121, 249, 0.07) 78%, rgba(251, 146, 60, 0.06) 90%, transparent),
+    linear-gradient(180deg, var(--bg-soft), transparent);
+}
+
+html[data-theme="light"] .post-hero {
+  background:
+    linear-gradient(112deg, rgba(13, 148, 136, 0.09), rgba(2, 132, 199, 0.05) 26%, rgba(37, 99, 235, 0.05) 44%, rgba(99, 102, 241, 0.09) 62%, rgba(162, 28, 175, 0.05) 78%, rgba(194, 65, 12, 0.045) 90%, transparent),
+    linear-gradient(180deg, var(--bg-soft), transparent);
+}
+
+/* 页脚：左青、中蓝紫、右橙 */
+
+.site-footer {
+  background:
+    radial-gradient(720px 320px at 8% 0%, rgba(45, 212, 191, 0.1), transparent 70%),
+    radial-gradient(560px 300px at 50% 0%, rgba(96, 165, 250, 0.07), transparent 72%),
+    radial-gradient(720px 340px at 92% 0%, rgba(251, 146, 60, 0.09), transparent 70%),
+    radial-gradient(520px 260px at 70% 0%, rgba(232, 121, 249, 0.05), transparent 72%),
+    var(--bg-soft);
+}
+
+html[data-theme="light"] .site-footer {
+  background:
+    radial-gradient(720px 320px at 8% 0%, rgba(13, 148, 136, 0.07), transparent 70%),
+    radial-gradient(560px 300px at 50% 0%, rgba(37, 99, 235, 0.05), transparent 72%),
+    radial-gradient(720px 340px at 92% 0%, rgba(194, 65, 12, 0.055), transparent 70%),
+    radial-gradient(520px 260px at 70% 0%, rgba(162, 28, 175, 0.04), transparent 72%),
+    var(--bg-soft);
+}
+
+/* 阅读进度：七段色相 */
+
+.read-progress {
+  background: linear-gradient(90deg, var(--accent), var(--c-sky) 22%, var(--c-blue) 40%, var(--accent-2) 56%, var(--c-violet) 70%, var(--c-fuchsia) 82%, var(--c-rose) 92%, var(--c-orange));
+}
+
+/* 分隔线与眉标短线延长色相范围 */
+
+.section-head::after {
+  background: linear-gradient(90deg, var(--accent-soft), var(--c-sky-soft) 24%, var(--c-blue-soft) 44%, var(--c-violet-soft) 62%, var(--c-rose-soft) 82%, transparent 94%);
+}
+
+.page-head .kicker::before,
+.post-hero .kicker::before {
+  background: linear-gradient(90deg, var(--accent), var(--c-sky) 34%, var(--c-blue) 58%, var(--c-fuchsia) 80%, transparent);
+}
+
+/* 表头：冷色三段 */
+
+.post-content th {
+  background: linear-gradient(110deg, var(--accent-soft), var(--c-blue-soft) 52%, var(--c-violet-soft));
+}
+
+/* 卡片内标签跟随卡片色相，避免每张卡的第一个标签都固定为青色 */
+
+.post-grid .card .chip {
+  color: var(--card-accent);
+  background: var(--card-accent-soft);
+}
+
+.post-grid .card .chip + .chip { opacity: 0.82; }
